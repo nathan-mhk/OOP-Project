@@ -1,14 +1,14 @@
 # Project: Disaster and Emergency Aid Management 
 ## Current project state
 
-### V0.6 MS2 Preview
-
+### V0.7 MS3 Preview
 ### Milestones
 
 |Milestone| Revision |  Overview<br />session |Comments |
 |------|:---:|:---:|:----|
 | [MS1](#milestone-1) | V1.0 | | |
 | [MS2](#milestone-2) | V1.0 |  |  |
+| [MS3](#milestone-3) | V1.0  |  |  |
 
 ## Use case
 
@@ -23,12 +23,16 @@ The types of items needed to be shipped in this situation are divided into two m
 To accomplish this task we need to create several classes to encapsulate the problem and provide a solution for this application. 
 
 
+
+
+
 ### Milestones
 
 |Milestone| Revision |Comments |
 |------|:---:|:----|
 | [MS1](#milestone-1) | V1.0 | |
 | [MS2](#milestone-2) | V1.0 | |
+| [MS3](#milestone-3) | V1.0 | |
 
 
 ## Milestones due dates
@@ -165,7 +169,7 @@ Before we start developing the application, we need to have a few classes develo
 
 # The Utils module  
 ## Utils.h
-```c++
+```C++
 namespace sdds {
    // Testing date values for application testing and debugging
    // these values must not change at submission time.
@@ -189,7 +193,7 @@ namespace sdds {
 
 ```
 ## Utils.cpp
-```c++
+```C++
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <ctime>
@@ -460,12 +464,12 @@ Upload your source code and the tester program to your `matrix` account. Compile
 
 Then, run the following command from your account (replace `profname.proflastname` with your professor’s Seneca userid):
 ```
-~profname.proflastname/submit 2??/prj/m1
+~profname.proflastname/submit 2??/prj/m?
 ```
 and follow the instructions.
 
 - *2??* is replaced with your subject code
-
+- *m?* is replaceed with the milestone name (i.e. m1, m2, etc...)
 
 ### The submit program's options:
 ```bash
@@ -617,6 +621,280 @@ for example, print the following if option 4 is selected:
 ### MS2 Expected Output
 
 [correct_output.txt](./ms2/correct_output.txt)
+
+### Submission
+
+Upload your source code and the tester program to your `matrix` account. Compile and run your code using the `g++` compiler [as shown in the introduction](#compiling-and-testing-your-program) and make sure that everything works properly.
+
+Then, run the following command from your account (replace `profname.proflastname` with your professor’s Seneca userid):
+```
+~profname.proflastname/submit 2??/prj/m?
+```
+and follow the instructions.
+
+- *2??* is replaced with your subject code
+- *m?* is replaced with the milestone (i.e. m1, m2, etc)
+
+### The submit program's options:
+```bash
+~prof_name.prof_lastname/submit DeliverableName [-submission options]<ENTER>
+[-submission option] acceptable values:
+  "-due":
+       Shows due dates only
+       This option cannot be used in combination with any other option.
+  "-skip_spaces":
+       Do the submission regardless of incorrect horizontal spacing.
+       This option may attract penalty.
+  "-skip_blank_lines":
+       Do the submission regardless of incorrect vertical spacing.
+       This option may attract penalty.
+  "-feedback":
+       Check the program execution without submission.
+```
+
+## [Back to milestones](#milestones)
+
+# Milestone 3
+## Core classes overview
+Overall there are going to be 3 core classes in this application:
+### iProduct
+An interface for an Item in the application
+### Item
+An Item is a concrete iProduct to keep track of the quantity and on-hand-quantity items to be prepared for shipping
+### Perishable
+A Pereishabe is a concrete Item that has an expiry date
+
+### Class diagram
+![Class diagram](images/classes.png)
+
+## MS3 development
+Your task for MS3 is to develop the iProduct and the Item modules.
+
+## The iProduct interface
+
+Create an interface module with the following pure virtual functions:
+```C++
+// to read the Stock-Keeping Unit from the console before
+// main data entry
+int readSku(std::istream& istr);
+// to reduce the quantity on hand
+int operator-=(int qty);
+// to increase the quantity on hand
+int operator+=(int qty);
+// returns the price of the produce
+operator double()const;
+// returns if the iProduct is in a good state
+operator bool()const;
+// returns the number of products needed
+int qtyNeeded()const;
+// returns the quantity on hand
+int qty()const;
+// determines if the iProduct is displayed in a linear format or 
+// descriptive format
+void linear(bool isLinear);
+// saves the iProduct into a file
+std::ofstream& save(std::ofstream& ofstr)const;
+// loads an iProduct from a file
+std::ifstream& load(std::ifstream& ifstr);
+// displays the iProduct on the screen
+std::ostream& display(std::ostream& ostr)const;
+// reads the iProduct from the console
+std::istream& read(std::istream& istr);
+// return true if the SKU is a match to the iProduct's SKU
+bool operator==(int sku)const;
+// returns true if the description is found in the iPorduct's description
+bool operator==(const char* description)const;
+
+```
+
+Also, set up the destructor of the iProduct to make sure the dynamic descendants of the iProduct interface will not have a memory leak if or when going out of scope.
+
+### Insertion and extraction operator overloads.
+Overload the Insertion and extraction operators for istream and ostream to call the display and the read methods of the iProduct.
+
+## iProductTester
+
+[iPorductTester.cpp](./ms3/iProductTester.cpp)
+
+This tester program should generate the following output with no memory leak:
+
+### iProductTester output
+```text
+load
+save
+operator bool
+operator double
+qtyNeeded
+qty
+operator==(cosnt char*)
+operator==
+operator+=
+operator-=
+readSku
+Linear
+```
+
+
+## The Item Module
+
+Derive a concrete class called the *Item* class, from the iProduct class.
+
+### Private Attributes
+Add the following private attributes to the Item:
+- a double for the price
+- an integer for quantity on hand
+- an integer for the needed quantity. This integer is the target amount for the item to be acquired.
+- a dynamic Cstring (not a C++ string) for the description of the item.
+- a boolean flag to dictate to the display function if the next output is going to be linear to descriptive.
+
+### Protected Attributes
+Add the following attributes to be accessible to the descendants of the **Item**.
+- a Status object to hold the state of the Item object
+- an integer value to hold the Stock-Keeping Unit number.
+
+### Protected Method
+
+- create a query called **linear** that returns the linear flag of the **Item**
+
+### Construction
+The Item has a default constructor that sets all the attributes to zero, nullptr and false.
+
+#### Rule of three
+Rule of three is implemented to make sure there is no memory leak in case of copying, assignment or destruction.
+
+### virtual public query iProduct overrides 
+  - the **qtyNeeded** method returns the needed-quantity attribute
+  - the **qty** method returns the on-hand quantity attribute
+  - the **double conversion operator** overload returns the price
+  - the **boolean conversion operator** overload returns the state of the object being good.
+  
+### virtual public modifier iProduct overrides
+  - the operator-= reduces the on-hand quantity by the received value
+  - the operator+= increases the on-hand quantity by the received value
+  - the linear modifier sets the linear flag attribute to true or false.
+
+### public modifier
+  - create a modifier called clear that does not accept any argument and sets the state of the Item object back to good, by resetting the state attribute.
+
+### virtual operator== iProduct overrides
+  - the integer comparison returns true if the SKU attribute matches the received value
+  - the constant character pointer comparison searches in the description of the Item for the appearance of the received Cstring. If a match was found it returns true. If any of the descriptions (The Items or the received value) are null or the match is not found, it will return false.
+
+### virtual Input/Output method iProduct overrides
+
+#### save
+If the state of the Item is good, it will write SKU, description, on-hand quantity, needed quantity and price in tab-separated format. 
+
+> Note that the price should be written with 2 digits after the decimal point.
+
+No new line is added.
+
+If the state is not good, it will do nothing. 
+
+In the end, the reference of the ofstream is returned.
+
+#### load
+After deallocating the description:
+
+The tab-separated SKU, description, on-hand quantity, needed quantity and price are read into their corresponding attributes and then a single character is discarded from the file.  
+
+If ifstream is in a bad state after the read the state of the item will be set to `"Input file stream read failed!"`
+
+> Note that the description is dynamically allocated
+
+In the end, the reference of ifstream is returned.
+
+#### display
+If the state is bad, the state is printed instead.
+
+If the state is good the following will be done.
+
+##### If in linear format  
+SKU, description, on-hand quantity, needed quantity and price are printed in the following format:
+
+```text
+##### | AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA | #### | #### | ####.## |
+Example:
+45678 | Sleeping Bags                       |  100 |  200 |   65.66 |
+45678 | Sleeping Bags and blankets with pil |  100 |  200 |   65.66 |
+```
+> Note that if the description is too long only the first 35 characters will be printed
+
+No newline is inserted after.
+
+##### If in descriptive format 
+
+The information is printed in the following format with a newline after.
+
+```text
+AMA Item:
+SKU: The description is printed fully
+Quantity Needed: ###
+Quantity Available: ###
+Unit Price: $####.##
+Needed Purchase Fund: $##.##
+
+Example:  
+AMA Item:
+45678: Sleeping Bags
+Quantity Needed: 200
+Quantity Available: 100
+Unit Price: $65.66
+Needed Purchase Fund: $6566.00
+```
+> Needed Purchase Fund is the amount of money needed to buy the rest of the needed amount to fulfill the needed quantity
+
+#### readSku and read
+Entering the information through the console is done in two stages; readSku and read.
+
+##### readSku
+Reads the SKU from the screen with the prompt `"SKU: "`. It makes sure the SKU number begins with digits 4 to 9 and it is 5 digits long.
+
+The entry is full-proof, for example:
+
+```text
+SKU: ten<ENTER>
+Invalid Integer, retry: 12345<ENTER>
+Value out of range [40000<=val<=99999]: 45678<ENTER>
+```
+
+##### read
+After deleting the description and clearing the state.
+
+**read** will first prompt the user with the title "AMA Item" and then displays the SKU and reads the rest of the information in a foolproof way (the same as SKU).
+
+Example:
+
+```text
+AMA Item:
+SKU: 44444
+Description: Sleeping Bag<ENTER>
+Quantity Needed: 200<ENTER>
+Quantity On Hand: 100<ENTER>
+Unit Price: $65.66<ENTER>
+```
+
+Valid values are as follows:
+- Description: Unknown length of characters
+- Quantity Needed: integers between 1 and 9999
+- Quantity On Hand: integers between 0 and the needed quantity.
+- Price: double values between 0.0 and 9999.0 Dollars.
+
+If the istream fails during reading, the state is set to `"Console entry failed!"`
+
+The istream reference is returned in the end.
+
+## MS3 Submission 
+
+> Make sure that all the debugging code and debugging comments are removed before submission.
+
+### MS3 Tester Progtram
+
+[main.cpp](./ms3/main.cpp)
+
+### MS3 Expected Output
+
+[correct_output.txt](./ms3/correct_output.txt)
 
 ### Submission
 
