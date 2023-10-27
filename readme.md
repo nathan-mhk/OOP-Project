@@ -1,15 +1,14 @@
 # Project: Disaster and Emergency Aid Management 
 ## Current project state
 
-### V0.5 MS1 Preview
-
+### V0.6 MS2 Preview
 
 ### Milestones
 
 |Milestone| Revision |  Overview<br />session |Comments |
 |------|:---:|:---:|:----|
 | [MS1](#milestone-1) | V1.0 | | |
-
+| [MS2](#milestone-2) | V1.0 |  |  |
 
 ## Use case
 
@@ -24,14 +23,12 @@ The types of items needed to be shipped in this situation are divided into two m
 To accomplish this task we need to create several classes to encapsulate the problem and provide a solution for this application. 
 
 
-
-
-
 ### Milestones
 
 |Milestone| Revision |Comments |
 |------|:---:|:----|
 | [MS1](#milestone-1) | V1.0 | |
+| [MS2](#milestone-2) | V1.0 | |
 
 
 ## Milestones due dates
@@ -168,7 +165,7 @@ Before we start developing the application, we need to have a few classes develo
 
 # The Utils module  
 ## Utils.h
-```C++
+```c++
 namespace sdds {
    // Testing date values for application testing and debugging
    // these values must not change at submission time.
@@ -192,7 +189,7 @@ namespace sdds {
 
 ```
 ## Utils.cpp
-```C++
+```c++
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <ctime>
@@ -489,3 +486,166 @@ and follow the instructions.
 
 ## [Back to milestones](#milestones)
 
+
+# Milestone 2
+# The User interface
+Now that the Status and Date classes are developed we can create the user interface of the system. 
+To accomplish this we need to create two classes; `Menu` and `AidMan` (Aid Management)
+
+## The Menu Module.
+Create a class called Menu. 
+This class has at least one attribute.
+- A dynamically allocated text that contains the list of options the user can select from.
+
+>For example, if a menu offers three types of drinks:
+>```text
+>1- Orange Juice
+>2- Water
+>3- Apple Juice
+>```
+>The text that the menu holds will be:
+>`"Orange Juice\tWater\tApple Juice"`. <br />
+>In this project we will call this text, **the menu content**.<br />
+>Also, from the number of tabs in the menu content we can determine that the number of options will be `3` (i.e. 2 tabs separate 3 options).
+
+### Construction
+A Menu is created using a C-string.
+
+The maximum number of options is 15, if the number of options is more than 15 or if the C-String is null, then the menu is rendered invalid.
+
+### Rule of three.
+- A Menu cannot be copied or assigned to another Menu.
+- When going out of scope **the menu content** is deallocated to prevent a memory leak.
+
+### Methods
+The menu has only one public method called run().
+#### run()
+This method receives nothing and returns an unsigned integer and will not change the state of the Menu object.
+
+The run method will first displays **the menu content**  in a menu format, prints a separator line and then prints `"0- Exit"` and finally goes to a new line.
+Then it will display `"> "` as a prompt and waits for the user to enter an integer between 0 and the number of options.
+This integer entry is foolproof. The user can not exit this stage unless a valid integer number with a valid value is entered. 
+- If the user enters a non-integer value the error message should be: `"Invalid Integer, retry: "`. 
+- If the user enters an invalid integer then the error message should be: `"Value out of range [0<=val<=X]: "`. Where `X` is the number of options.
+
+In the end, the selected number will be returned.
+
+If the manu is invalid, ```"Invalid Menu!<Newline>"``` is printerd and run() returns 0.
+
+#### Execution sample
+Using the previous example's data an execution sample of the run method will be as follows:
+
+```text
+1- Orange Juice
+2- Water
+3- Apple Juice
+---------------------------------
+0- Exit
+> abc<ENTER>
+Invalid Integer, retry: 10
+Value out of range [0<=val<=3]: 3
+```
+
+3 will be returned by the run function.
+
+#### Additional methods
+The Menu class with the above capabilities supports what we need from a Menu up to this part of the application. There is no "need" for any additional methods or attributes. However, you are free to (and probably should) add any other functionality or attributes needed to make the work easier for you.  
+
+## The AidMan Module
+
+The AidMan Module is the controller of the whole system. We will design it as if the application is complete but concerning the functionality of the application, it will be completely hollow. Essentially at this stage of the development, AidMan is only a prototype for the system. 
+
+When all the pieces of the system are developed, we will put them together by adding their role to the AidMan Class.
+
+### Development
+Create a class called AidMan that offers a Menu with the list of tasks needed to be done to manage the preparation of products to be shipped to places in need. 
+
+#### Attributes
+
+##### file name
+Dynamically holding the name of a data file holding the aid and product information.
+##### main menu 
+A Menu object.  
+
+#### Private Methods
+For now, there is only one private method, but as we advance in the development of the system new methods may be added.
+
+##### menu()
+This function receives nothing and returns an unsigned integer that is the user's selection of an option in the main menu of the system. The menu function will not change the state of the AidMan class.
+
+The Menu will first print the title of the application, the current date and the data file name.
+```text
+Aid Management System Prototype
+Date: YYYY/MM/DD
+Data file:  filename.csv
+---------------------------------
+```
+If the **filename** attribute is null, it will print `"No file"` instead of the file name.
+
+Then it will run the main menu and return the selection made by the user.
+
+#### Construction
+The AidMan has only a one-argument constructor that receives a filename  and initializes the main menu with the following text as **the menu content**:
+```text
+"List Items\tAdd Item\tRemove Item\tUpdate Quantity\tSortShip Items New/Open Aid Database"
+```
+The filename is copied and dynamically kept in the filename attribute only if it is not nullptr. If it is nullptr then the filename attribute will be nullptr as well. 
+
+#### Rule Of Three
+- An AidMan object can neither be copied nor assigned to another AinMan object.
+- When going out of scope the destructor makes sure there is no memory leak.
+
+### the public method run()
+run() receives and returns nothing and runs the whole application.
+
+In a loop, the run function will keep displaying the menu by calling the **menu()** function and awaits the user's entry. Then after each selection, based on the user's entry, it will execute the task chosen from the menu. 
+
+The run function exits when the user selects `0`, at which point it will print `"Exiting Program!"<NEWLINE>` and terminates.
+
+For now, when a task is selected just print the task name as follows:<br />
+`<NEWLINE>****Task Name****<2 NEWLINES>`<br />
+for example, print the following if option 4 is selected:
+`<NEWLINE>****Update Quantity****<2 NEWLINES>`<br />
+
+## MS2 Submission 
+> Make sure that all the debugging code and debugging comments are removed before submission.
+
+### MS2 Tester Progtram
+
+[main.cpp](./ms2/main.cpp)
+
+### MS2 Expected Output
+
+[correct_output.txt](./ms2/correct_output.txt)
+
+### Submission
+
+Upload your source code and the tester program to your `matrix` account. Compile and run your code using the `g++` compiler [as shown in the introduction](#compiling-and-testing-your-program) and make sure that everything works properly.
+
+Then, run the following command from your account (replace `profname.proflastname` with your professor’s Seneca userid):
+```
+~profname.proflastname/submit 2??/prj/m?
+```
+and follow the instructions.
+
+- *2??* is replaced with your subject code
+- *m?* is replaced with the milestone (i.e. m1, m2, etc)
+
+### The submit program's options:
+```bash
+~prof_name.prof_lastname/submit DeliverableName [-submission options]<ENTER>
+[-submission option] acceptable values:
+  "-due":
+       Shows due dates only
+       This option cannot be used in combination with any other option.
+  "-skip_spaces":
+       Do the submission regardless of incorrect horizontal spacing.
+       This option may attract penalty.
+  "-skip_blank_lines":
+       Do the submission regardless of incorrect vertical spacing.
+       This option may attract penalty.
+  "-feedback":
+       Check the program execution without submission.
+```
+
+## [Back to milestones](#milestones)
