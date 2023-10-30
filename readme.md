@@ -44,10 +44,10 @@ This project will be done in 5 milestones and each milestone will have its due d
 
 |Milestone| Mark | Due date | Submission Policy|
 |:------:|:---:|:---:|-------|
-| MS1 | 10% | Nov 4 | gets full mark even if 1 week late. gets 0% afterwards|
-| MS2 | 10% | Nov 8 | gets full mark even if 1 week late. gets 0% afterwards|
-| MS3 | 10% | Nov 19 | gets full mark even if 1 week late. gets 0% afterwards|
-| MS4 | 10% | Nov 22 | gets full mark even if 1 week late. gets 0% afterwards|
+| MS1 | 10% | Nov 4 | gets full mark even if 1 week late. gets 0% afterwards, **Rejected After Dec 02**|
+| MS2 | 10% | Nov 8 | gets full mark even if 1 week late. gets 0% afterwards, **Rejected After Dec 02**|
+| MS3 | 10% | Nov 19 | gets full mark even if 1 week late. gets 0% afterwards, **Rejected After Dec 02**|
+| MS4 | 10% | Nov 22 | gets full mark even if 1 week late. gets 0% afterwards, **Rejected After Dec 02**|
 | MS5 | 60% | See below| See below|
 
 ### Milestone 5 submissions
