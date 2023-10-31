@@ -15,10 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Date.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="iProduct.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Item.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Perishable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Status.cpp">
@@ -27,15 +33,21 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Date.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="iProduct.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Perishable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Status.h">
@@ -47,6 +59,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="data.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="dataOriginal.dat">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="..\readme.md">

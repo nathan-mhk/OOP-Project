@@ -19,16 +19,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="iProduct.cpp" />
-    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="AidMan.cpp" />
+    <ClCompile Include="Date.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Perishable.cpp" />
     <ClCompile Include="Status.cpp" />
+    <ClCompile Include="iProduct.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="iProduct.h" />
+    <ClInclude Include="AidMan.h" />
+    <ClInclude Include="Date.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="Perishable.h" />
     <ClInclude Include="Status.h" />
+    <ClInclude Include="iProduct.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -37,12 +45,17 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="correct_output.txt" />
+    <Text Include="correct_output51.txt" />
+    <Text Include="correct_output52.txt" />
+    <Text Include="correct_output53.txt" />
+    <Text Include="correct_output54.txt" />
+    <Text Include="correct_output55.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2497012b-2d68-476f-8650-a60a4071a152}</ProjectGuid>
-    <RootNamespace>ms3</RootNamespace>
+    <ProjectGuid>{3c0d4ff6-dab1-419d-b21e-ddceded144ea}</ProjectGuid>
+    <RootNamespace>FP</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

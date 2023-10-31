@@ -15,10 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="iProduct.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp">
+    <ClCompile Include="AidMan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Date.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Status.cpp">
@@ -27,15 +30,24 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="iProduct.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Perishable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="iProduct.h">
+    <ClInclude Include="AidMan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Item.h">
+    <ClInclude Include="Date.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Status.h">
@@ -44,16 +56,43 @@
     <ClInclude Include="Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iProduct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Perishable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="data.dat">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="..\readme.md">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="data.dat">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="correct_output51.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="correct_output52.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="correct_output53.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="correct_output54.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="correct_output55.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
     <Text Include="correct_output.txt">
       <Filter>Resource Files</Filter>
     </Text>

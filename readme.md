@@ -1,7 +1,8 @@
 # Project: Disaster and Emergency Aid Management 
 ## Current project state
+V1.0
 
-### V0.7 MS3 Preview
+
 ### Milestones
 
 |Milestone| Revision |  Overview<br />session |Comments |
@@ -9,6 +10,9 @@
 | [MS1](#milestone-1) | V1.0 | | |
 | [MS2](#milestone-2) | V1.0 |  |  |
 | [MS3](#milestone-3) | V1.0  |  |  |
+| [MS4](#milestone-4) | V1.0  | |  |
+| [MS5](#milestone-5) | V1.0 |  | |
+
 
 ## Use case
 
@@ -33,6 +37,9 @@ To accomplish this task we need to create several classes to encapsulate the pro
 | [MS1](#milestone-1) | V1.0 | |
 | [MS2](#milestone-2) | V1.0 | |
 | [MS3](#milestone-3) | V1.0 | |
+| [MS4](#milestone-4) | V1.0 |  |
+| [MS5](#milestone-5) | V1.0 |  |
+
 
 
 ## Milestones due dates
@@ -734,7 +741,6 @@ readSku
 Linear
 ```
 
-
 ## The Item Module
 
 Derive a concrete class called the *Item* class, from the iProduct class.
@@ -927,3 +933,663 @@ and follow the instructions.
 ```
 
 ## [Back to milestones](#milestones)
+
+# Milestone 4
+
+## The Perishable Class
+Inherit a class from the Item class called Perishable. 
+
+A Perishable item, unlike an Item, has an SKU that starts with digits 1 to 3.  (10000 to 39999)
+
+### Attributes
+#### The Expiry Date
+The Perishable class adds an expiry date to the Item.
+
+#### The Handling Instructions
+Dynamically holds a text for the instructions with which the perishable item should be handled.
+
+### Construction
+A Perishable object is created using the default constructor that creates an empty perishable item.
+
+### Rule of three
+Implement the rule of three so a Perishable Item can be copied or assigned to another perishable item safely.
+
+### Query 
+Create a constant query called `expiry` that returns a constant reference of the expiry date.
+
+### Virtual overrides
+#### readSKU override
+Override readSKU function to only receive SKU numbers between 10000 and 39999 (only SKUs starting with digits 1 to 3)
+
+#### save override
+If the Perishable item is in a good state
+- it will call the save of the Base class.
+- writes a tab
+- writes the handling instructions, if handling instructions exist and the attribute is not empty.
+- writes a tab
+- writes an unformatted copy of the expiry date
+
+#### load override
+- calls the load of the Base class.
+- reads the handling instructions dynamically into the handling instructions attribute
+- ignores the tab
+- reads the expiry date
+- ignores the new line.
+- if the ifstream object has failed, it will set the state of the Item to `"Input file stream read (perishable) failed!"`
+
+#### display override
+- if the Perishable Item is in a bad state, the state is printed
+- otherwise if linear
+   - the display of the base class is called
+   - if handling instructions are not null and not empty a single asterisk ('*') is printed otherwise a single space (' ') is printed.
+   - the expiry date is printed
+- if not linear
+   - prints `"Perishable "`
+   - displays the base class
+   - prints `"Expiry date: "` 
+   - printed the expiry date (formatted)
+   - if the handling instructions attribute is not null and is not empty `"Handling Instructions: "` and the content of the instructions are printed
+   - A new line is printed.
+   
+##### Examples
+###### Linear without handling instructions
+```text
+ 12345 | Baby Formula                        |  140 |  200 |   33.99 | 2023/12/12
+```
+
+###### Linear with handling instructions
+```text
+ 12113 | Hydrogen peroxide 100ml bottles     |  275 |  300 |    3.99 |*2024/11/11
+```
+
+###### detailed without handling instructions
+```text
+Perishable AMA Item:
+12345: Baby Formula
+Quantity Needed: 200
+Quantity Available: 140
+Unit Price: $33.99
+Needed Purchase Fund: $2039.40
+Expiry date: 2024/12/12
+
+```
+
+###### detailed with handling instructions
+```text
+Perishable AMA Item:
+12113: Hydrogen peroxide 100ml bottles
+Quantity Needed: 300
+Quantity Available: 275
+Unit Price: $3.99
+Needed Purchase Fund: $99.75
+Expiry date: 2024/11/11
+Handling Instructions: Keep away from direct sunlight
+
+```
+
+#### read override
+- The read of the base class is called
+- the handling instructions memory is deleted and the attribute is set to null
+- prompts: `"Expiry date (YYMMDD): "`
+- the expiry date is read
+- newline is ignored
+- prompts: `"Handling Instructions, ENTER to skip: "`
+- peeks and if the very first character is not `'\n'` it will read the instructions dynamically into the instructions attribute. otherwise, nothing is read and the attribute remains null.
+- if the istream object is in a fail state, it will set the state of the Perishable Item to `"Perishable console date entry failed!"`.
+
+
+
+## MS4 Submission 
+
+### Files to submit
+```text
+Utils.cpp
+Utils.h
+Status.cpp
+Status.h
+iProduct.h
+iProduct.cpp
+Item.h
+Item.cpp
+Perishable.cpp
+Perishable.h
+Date.cpp
+Date.h
+main.cpp
+```
+
+### MS4 Tester Progtram
+
+[main.cpp](./ms4/main.cpp)
+
+### MS1 Expected Output
+
+[correct_output.txt](./ms4/correct_output.txt)
+
+### Submission
+
+Upload your source code and the tester program to your `matrix` account. Compile and run your code using the `g++` compiler [as shown in the introduction](#compiling-and-testing-your-program) and make sure that everything works properly.
+
+Then, run the following command from your account (replace `profname.proflastname` with your professor’s Seneca userid):
+```
+~profname.proflastname/submit 2??/prj/m?
+```
+and follow the instructions.
+
+- *2??* is replaced with your subject code
+- *m?* is replaceed with the milestone name (i.e. m1, m2, etc...)
+
+### The submit program's options:
+```bash
+~prof_name.prof_lastname/submit DeliverableName [-submission options]<ENTER>
+[-submission option] acceptable values:
+  "-due":
+       Shows due dates only
+       This option cannot be used in combination with any other option.
+  "-skip_spaces":
+       Do the submission regardless of incorrect horizontal spacing.
+       This option may attract penalty.
+  "-skip_blank_lines":
+       Do the submission regardless of incorrect vertical spacing.
+       This option may attract penalty.
+  "-feedback":
+       Check the program execution without submission.
+```
+
+
+## [Back to milestones](#milestones)
+
+# Milestone 5 (in FP folder)
+
+For the last milestone of this project, complete the implementation of the **AidMan* module (done in milestone 5) and implement the functionalities of the main menu.
+
+To make the testing and submission of the project easier the submission of milestone 5 is broken down into 6 parts; (m51, m52, m53, m54, m55 and m56):
+
+## AidMan maximum number if items.
+have the following constant created for maximum number items in the system.
+```C++
+   const int sdds_max_num_items = 100;
+```
+
+## AidMan additional attributes 
+Start by adding the following attributes to the AidMan class:
+- an array of **sdds_max_num_items** **iProduct Pointers**
+- an integer to keep track of the **number of iProduct Items** pointed by the iProduct pointers.<br />Obviously this number can not grow more than 100. 
+
+>This application can only keep track of a maximum of **sdds_max_num_items** products at a time. If more products are being managed, they must be added to a separate data file.
+ 
+
+## AidMain::run() 
+
+### The main menu 
+Modify the run() function so if any menu is selected before opening a database, the selection is changed to 7 automatically.
+
+Insert the following logic after where the main menu selection is returned and before executing the user's selection.
+
+- after getting the selection for the menu. 
+- if selection is not zero and the **filename** is null and the selection is not 7, change the selection to 7.
+
+Execution sample:
+
+```text
+Aid Management System Version 0.6
+Date: 2022/03/31
+Data file: No file
+---------------------------------
+1- List Items
+2- Add Item
+3- Remove Item
+4- Update Quantity
+5- Sort
+6- Ship Items
+7- New/Open Aid Database
+---------------------------------
+0- Exit
+> 1
+
+****New/Open Aid Database****
+Enter file name:
+```
+> note that even though option 1 is selected since there is no data file, selection number 7 is executed.
+
+### saving at exit.
+
+When exiting the run() method, [save](#the-save-method)() the data file.
+
+## Milestone 51
+To use the Aid Management application the first action should be selecting menu item 7 to select a data file to work with. If the data file already exists all the records of the data file will be loaded into the iProduct array. If the data file does not exist, then a new data file can be created.
+
+### Menu item 7 (New/Open Aid Database)
+Three private methods need to be implemented to complete menu item 7: 
+- a method for saving data records in file
+- a method to dallocate all the memory allocated by the class
+- a method to load all the records from the data file into the class.
+
+#### the save method
+- if the filename attribute is not null
+   - Creates an ofstream object using the filename (to write into) 
+   - then function goes through the **iProduct Pointers** up to the number of **number of iProduct Items** and calls the save() of each iProduct to write them in the file.
+- if the filename attribute is null, this function does nothing.
+
+#### the deallocate method
+deletes all the dynamic memory allocated in **iProduct Pointers** elements and the filename, and then sets **number of iProduct Items** to zero.
+
+#### the load method. (menu item 7)
+Loads data records from a data file and returns true if at least one record is loaded.
+
+- Saves all the already existing iProducts
+- Deallocates all the resources of the AidMan class making it ready to load new information.
+- opens m_filename for reading in an **ifstream**
+- if opening the file was not successful
+  - prints: `Failed to open FN for reading!` (where FN is the file name)
+  - prints: `Would you like to create a new data file?` and displays the following menu:
+  
+     ```text
+     1- Yes!
+     0- Exit
+     >
+     ```
+   
+     If the user selects yes, it will create an empty file under the same name and in any case, the function exits after.
+- if the file opening the file was successful, in a loop:
+   - peeks the first character of the record to determine if the record is a Perishable item or not. (using the first digit of the SKU)
+      - if the upcoming record is perishable it will create a new **Perishable** item in the next available **iProduct Pointers** element.
+      - if the upcoming record is non-perishable it will create an **Item** in the next available **iProduct Pointers**.
+      - if the next character is not recognized as a valid digit, the ifstream is set into an invalid state.
+   - if the allocation was a success (Item or Perishable) 
+      - calls the load method of the item to load the data from the file. 
+      - the loaded item is checked to be in a good state, if true, **number of iProduct Items** is added by one, if false the loaded item is deleted.
+
+## Menu Item 1 (List Items)
+Implement a list method for this menu selection (see the following instructions).
+
+When menu item 1 is selected call the [list](#int-listconst-char-sub_desc--nullptr) function and if any items are listed (list is not empty) print the following prompt:  
+```text
+Enter row number to display details or <ENTER> to continue:
+>
+```
+If the user presses enter, go back to the main menu otherwise display the selected item in a non-linear format.(The integer entry for the row number must be fool-proof.)
+
+### `int list(const char* sub_desc = nullptr);`
+- if sub_desc is null, print all the items in a linear format.
+- if sub_desc is not, null print only the items containing the sub_desc in their description.
+- list returns the number of iProducts printed (in the following example it will return 7)
+- if no items are listed, print `"The list is emtpy!"` and go to new line.
+
+Use the following format for your printout:
+```text
+ ROW |  SKU  | Description                         | Have | Need |  Price  | Expiry
+-----+-------+-------------------------------------+------+------+---------+-----------
+   1 | 99999 | Description goes here               | 9999 | 9999 | 9999.99 |*2023/11/11
+   2 | 19999 | Description goes here               | 9999 | 9999 | 9999.99 |
+   3 | 99999 | Description goes here               | 9999 | 9999 | 9999.99 | 2023/11/11
+   4 | 29999 | Description goes here               | 9999 | 9999 | 9999.99 |
+   5 | 99999 | Description goes here               | 9999 | 9999 | 9999.99 |*2023/11/11
+   6 | 39999 | Description goes here               | 9999 | 9999 | 9999.99 |
+   7 | 99999 | Description goes here               | 9999 | 9999 | 9999.99 |*2023/11/11
+-----+-------+-------------------------------------+------+------+---------+-----------
+```
+  
+### [Tester Programs ](#m51) - [Submission Instructions](#project-submission-ms5)
+
+## Milestone 52
+### `int search(int sku) const `
+Loops through all the **iProduct Pointers** elements and if the SKU is a match it will return the index, otherwise it will return -1
+
+### Menu Item 2 (Add Item)
+
+- if **number of iProduct Items** is not less than **sdds_max_num_items**, it will print: `"Database full!"`
+- Otherwise, the following menu is displayed for the type of the iProduct to be added:
+
+```text
+1- Perishable
+2- Non-Perishable
+-----------------
+0- Exit
+>
+```
+
+- Based on the user's entry a Perishable or Non-Perishable Item is allocated in an iProduct pointer. If the user chooses to exit, the message `"Aborted\n"` is printed. 
+- If the user chooses not to exit the SKU of the item is read from the console and [searched](#int-searchint-sku-const) against already existing Items in the system.
+- If the SKU is found in the system the message: <br />`"Sku: 99999 is already in the system, try updating quantity instead.\n"` (99999 is replaced with the sku number) is printed and the allocated item is deleted.
+- If the SKU is not found, the rest of the data is read from the console. 
+- If the read iProduct is in a good state, it is added to the next available element of the **iProduct Pointers** array and **number of iProduct Items** is added by one, otherwise, the allocated Item is displayed and then deleted.
+
+### [Tester Programs ](#m52) - [Submission Instructions](#project-submission-ms5)
+
+## Milestone 53
+### `void remove(int index)`
+- deletes the iProduct at index in **iProduct Pointers**.
+- Then shifts all the iProducts to left once and reduces **number of iProduct Items** by one.
+
+[Illustration](images/remove.pdf)
+
+### Remove Item
+- Prompts the user: `"Item description: "`
+- Gets a Cstring for a description and [lists the items containing the description](#int-listconst-char-sub_desc--nullptr). 
+- If any item was found and listed it will ask for one of the SKU numbers listed to remove. (fool-proof using the prompt ` "Enter SKU: "`)
+- [Searches](#int-searchint-sku-const) for the SKU, if not found, it will print `"SKU not found!"`.
+- If SKU is found it will print the Item and the following confirmation message and menu:  
+
+   ```text
+   Following item will be removed:
+   ??? AMA Item:
+   99999: Description goes here
+   Quantity Needed: 999
+   Quantity Available: 999
+   Unit Price: $99.99
+   Needed Purchase Fund: $0.00
+   
+   Are you sure?
+   1- Yes!
+   0- Exit
+   >
+   ```
+   If the user selects yes, it will [remove](#remove-item) and prints `"Item removed!"`. Otherwise, it will exit the menu item printing: `"Aborted!"`
+
+### [Tester Programs ](#m53) - [Submission Instructions](#project-submission-ms5)
+
+
+## Milestone 54
+### Update Quantity
+- Prompts `"Item description: "` and receives a sub-description from the user dynamically.
+- Lists all the iProducts containing the description; if no match is found, it prints `"No matches found!\n"`
+- After displaying all the matches it asks the user for the SKU of the iProduct that needs updating by prompting `"Enter SKU: "`
+- Then it will [search for the SKU](#int-searchint-sku-const) to find the index of the iProcuct in the **iProduct Pointers**. 
+- If a match is not found it will print `"SKU not found!\n"` and exits
+- After finding a match it will display a menu for adding or reducing the quantity:
+  ```text
+  1- Add
+  2- Reduce
+  0- Exit
+  >
+  ```
+  if the user selects exit it will print `"Aborted!\n"` and exit.
+- If add is selected a fool-proof quantity value is received from 1 up to the maximum amount needed to fulfill the needed quantity using the prompt: `"Quantity to add: "`. Then the quantity is increased by the entered amount.<br />
+After increasing quantity, a confirmation message is printed as follows:<br />`"X items added!"`, replacing X with the amount.
+- If reduce is selected a fool-proof quantity value is received from 1 up to the quantity on hand using the prompt: `"Quantity to Reduce: "`. Then the quantity is reduced by the entered amount.<br />
+After reducing quantity a confirmation message is printed as follows:<br />`"X items removed!"`, replacing X with the amount.
+- Selecting Add on an already fulfilled needed quantity should result in issuing the message: `"Quantity Needed already fulfilled!\n"`
+- Selecting Reduce on a zero quantity should result in issuing the message: `"Quaintity on hand is zero!\n"`
+
+### [Tester Programs ](#m54) - [Submission Instructions](#project-submission-ms5)
+
+## Milestone 55
+### Sort
+Sorts the items in the **iProduct Pointers** array, based on difference between quantity needed and quantity on hand in descending order. When completed it will print `"Sort completed!\n"`
+
+### [Tester Programs ](#m55) - [Submission Instructions](#project-submission-ms5)
+
+
+## Milestone 56
+
+### Ship Items
+
+- Create an ofstream for shipping-order-file under the name `"shippingOrder.txt"`.
+- Print in the file: `"Shipping Order, Date: 9999/99/99\n"` (9999/99/99 is replaced by the current date)
+- Print the table titles as follows:  
+  ```text
+   ROW |  SKU  | Description                         | Have | Need |  Price  | Expiry
+  -----+-------+-------------------------------------+------+------+---------+-----------
+  ```
+- In a loop go through all the **iProduct Pointers** elements and if the quantity needed and quantity on hand of the product is a match print it in the linear format into the file and remove it from the  **iProduct Pointers** array.
+- Count the number of printed (shipped) items
+- At end close the table by printing:  
+  ```text
+  -----+-------+-------------------------------------+------+------+---------+-----------
+  ```
+- end the process by printing the number of items shipped on the screen:<br />
+`""Shipping Order for 999 times saved!""` , 999 is replaced by the number of shipped (removed) items.
+
+
+### [Tester Programs ](#m56) - [Submission Instructions](#project-submission-ms5)
+
+
+# Reflection 
+
+Create a file call `reflect.txt`.
+
+Add all your citations (coding help received or coding help offered to other students)
+
+Write about your final solution for the **project** and the OOP244 subject overall, what you learned and mention any issues that caused you difficulty.
+
+[Reflection Submission](#refection-submission)
+
+# Milestone 5 Testers
+
+
+### M51
+
+[Back to Milestone 5-1](#milestone-51)
+
+#### Tester program
+
+[main51.cpp](./FP/main51.cpp)
+
+#### Test Data
+`<E> = <ENTER>`
+
+```text
+1<E>
+data.dat<E>
+1<E>
+<E>
+1<E>
+5<E>
+0<E>
+```
+#### Expected Output
+
+[correct_output51](./FP/correct_output51.txt)
+
+### M52
+
+[Back to Milestone 5-2](#milestone-52)
+
+#### Tester program
+
+[main52.cpp](./FP/main52.cpp)
+
+#### Test Data
+`<E> = <ENTER>`
+
+```text
+2<E>
+data.dat<E>
+2<E>
+1<E>
+22222<E>
+Rice<E>
+200<E>
+100<E>
+16.99<E>
+241010<E>
+<E>
+2<E>
+2<E>
+44444<E>
+0<E>
+```
+#### Expected Output
+
+[correct_output52](./FP/correct_output52.txt)
+
+### M53
+
+[Back to Milestone 5-3](#milestone-53)
+
+#### Tester program
+
+[main53.cpp](./FP/main53.cpp)
+
+#### Test Data
+`<E> = <ENTER>`
+
+```text
+3<E>
+data.dat<E>
+3<E>
+en<E>
+12113<E>
+1<E>
+1<E>
+<E>
+0<E>
+```
+#### Expected Output
+
+[correct_output53](./FP/correct_output53.txt)
+
+### M54
+
+[Back to Milestone 5-4](#milestone-54)
+
+#### Tester program
+
+[main54.cpp](./FP/main54.cpp)
+
+#### Test Data
+`<E> = <ENTER>`
+
+```text
+4<E>
+data.dat<E>
+4<E>
+En<E>
+11223<E>
+0<E>
+4<E>
+En<E>
+11223<E>
+1<E>
+4<E>
+En<E>
+11223<E>
+2<E>
+40<E>
+38<E>
+4<E>
+En<E>
+11223<E>
+1<E>
+40<E>
+4<E>
+1<E>
+<E>
+0<E>
+```
+#### Expected Output
+
+[correct_output54](./FP/correct_output54.txt)
+
+### M55
+
+[Back to Milestone 5-5](#milestone-55)
+
+#### Tester program
+
+[main55.cpp](./FP/main55.cpp)
+
+#### Test Data
+`<E> = <ENTER>`
+
+```text
+1<E>
+data.dat<E>
+1<E>
+<E>
+5<E>
+1<E>
+<E>
+0<E>
+```
+#### Expected Output
+
+[correct_output55](./FP/correct_output55.txt)
+
+### M56
+
+[Back to Milestone 5-6](#milestone-56)
+
+#### Tester program
+
+[main56.cpp](./FP/main56.cpp)
+
+#### Test Data
+`<E> = <ENTER>`
+
+```text
+7<E>
+data.dat<E>
+6<E>
+1<E>
+<E>
+0<E>
+```
+#### Expected Output
+
+[correct_output56](./FP/correct_output56.txt)
+
+
+## Project submission (MS5)
+
+### Files to submit
+```text
+AidMan.h
+AidMan.cpp
+Date.h
+Date.cpp
+iPorduct.h
+iPorduct.cpp
+Item.h
+Item.cpp
+Menu.h
+Menu.cpp
+Perishable.h
+Perishable.cpp
+Status.h
+Status.cpp
+Utils.h
+Utils.cpp
+main.cpp
+reflect.txt (reflection submission only)
+```
+
+Upload your source codes and the tester program to your `matrix` account. Compile and run your code using the `g++` compiler [as shown in the introduction](#compiling-and-testing-your-program) and make sure that everything works properly.
+
+Then, run the following command from your account (replace `profname.proflastname` with your professor’s Seneca userid):
+```
+~profname.proflastname/submit 2??/prj/m5X
+```
+and follow the instructions.
+
+- *2??* is replaced with your subject code
+- *X* is replaced with part number of milestone 5
+
+### Refection submission
+
+To submit you reflection on the project and the semester overall, please upload `reflect.txt` to matrix.
+
+Then, run the following command from your account (replace `profname.proflastname` with your professor’s Seneca userid):
+```
+~profname.proflastname/submit 2??/prj/ref
+```
+and follow the instructions.
+
+### The submitter program's options:
+```bash
+~prof_name.prof_lastname/submit DeliverableName [-submission options]<ENTER>
+[-submission option] acceptable values:
+  "-due":
+       Shows due dates only
+       This option cannot be used in combination with any other option.
+  "-skip_spaces":
+       Do the submission regardless of incorrect horizontal spacing.
+       This option may attract penalty.
+  "-skip_blank_lines":
+       Do the submission regardless of incorrect vertical spacing.
+       This option may attract penalty.
+  "-feedback":
+       Check the program execution without submission.
+```
+
