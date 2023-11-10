@@ -598,7 +598,7 @@ Then it will run the main menu and return the selection made by the user.
 #### Construction
 The AidMan has only a one-argument constructor that receives a filename  and initializes the main menu with the following text as **the menu content**:
 ```text
-"List Items\tAdd Item\tRemove Item\tUpdate Quantity\tSortShip Items New/Open Aid Database"
+"List Items\tAdd Item\tRemove Item\tUpdate Quantity\tSort\tShip Items\tNew/Open Aid Database"
 ```
 The filename is copied and dynamically kept in the filename attribute only if it is not nullptr. If it is nullptr then the filename attribute will be nullptr as well. 
 
