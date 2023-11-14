@@ -11,7 +11,7 @@ V1.0
 | [MS2](#milestone-2) | V1.0 |    |
 | [MS3](#milestone-3) | V1.0  |    |
 | [MS4](#milestone-4) | V1.0  |   |
-|                     | V1.1  | Correcte main.cpp to match<br/>correct_output.cpp  |
+|                     | V1.1  | Correcte main.cpp to match<br/>correct_output.txt  |
 | [MS5](#milestone-5) | V1.0 |   |
 
 
