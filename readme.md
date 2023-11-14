@@ -5,13 +5,14 @@ V1.0
 
 ### Milestones
 
-|Milestone| Revision |  Overview<br />session |Comments |
-|------|:---:|:---:|:----|
-| [MS1](#milestone-1) | V1.0 | | |
-| [MS2](#milestone-2) | V1.0 |  |  |
-| [MS3](#milestone-3) | V1.0  |  |  |
-| [MS4](#milestone-4) | V1.0  | |  |
-| [MS5](#milestone-5) | V1.0 |  | |
+|Milestone| Revision | Comments |
+|------|:---:|:----|
+| [MS1](#milestone-1) | V1.0 |  |
+| [MS2](#milestone-2) | V1.0 |    |
+| [MS3](#milestone-3) | V1.0  |    |
+| [MS4](#milestone-4) | V1.0  |   |
+|                     | V1.1  | Correcte main.cpp to match<br/>correct_output.cpp  |
+| [MS5](#milestone-5) | V1.0 |   |
 
 
 ## Use case
@@ -101,7 +102,7 @@ Final Project Milestone ?
 Module: Whatever
 Filename: Whatever.cpp
 Version 1.0
-Author	John Doe
+Author   John Doe
 Revision History
 -----------------------------------------------------------
 Date      Reason
