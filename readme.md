@@ -1063,7 +1063,7 @@ main.cpp
 
 [main.cpp](./ms4/main.cpp)
 
-### MS1 Expected Output
+### MS4 Expected Output
 
 [correct_output.txt](./ms4/correct_output.txt)
 
@@ -1100,7 +1100,8 @@ and follow the instructions.
 
 ## [Back to milestones](#milestones)
 
-# Milestone 5 (in FP folder)
+# Milestone 5
+**(in FP folder)**
 
 For the last milestone of this project, complete the implementation of the **AidMan* module (done in milestone 5) and implement the functionalities of the main menu.
 
