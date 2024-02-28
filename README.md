@@ -279,9 +279,9 @@ Please note that this function does not handle any invalid data. It simply follo
 - >Note: Do not clear or flush the istream as this method adheres to the istream standards. The caller of this function may check the istream state to ensure that the read operation was successful, if necessary.
 
 ```c++
-operator int()const;
+operator unsigned int()const;
 ```
-This operator overloads the cast to `int` for the `Time` class. If a `Time` object is cast to an integer, it will return the number of minutes held in the object.
+This operator overloads the cast to `unsigned int` for the `Time` class. If a `Time` object is cast to an unsigned integer, it will return the number of minutes held in the object.
 
 ```c++
 Time& operator*= (int val);
