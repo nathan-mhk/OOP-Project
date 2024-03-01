@@ -523,14 +523,396 @@ and follow the instructions.
 
 ## [Back to milestones](#milestones)
 
-
 # Milestone 3
 
-## TBA
+## The Ticket Module (implementation provided)
+
+The Ticket class encapsulates a Ticket to be given to the patients when they arrive. Read the code, understand it, and use the logic and the functionalities throughout the project. 
+
+```c++
+#ifndef SENECA_TICKET_H_
+#define SENECA_TICKET_H_
+#include <iostream>
+#include "Time.h"
+#include "IOAble.h"
+namespace seneca {
+   class Ticket:public IOAble{
+      Time m_time;
+      int m_number;
+   public:
+      Ticket(int number);
+      Time time()const;
+      int number()const;
+      void resetTime();
+      std::ostream& write(std::ostream& ostr )const;
+      std::istream& read(std::istream& istr);
+   };
+}
+#endif // !SENECA_TICKET_H_
+```
+### Member Variables
+#### Time m_time;
+The time the Ticket was issued
+#### int m_Number;
+The ticket number; A sequential integer, starting from one and unique for each lineup.
+### Member functions and constructor
+#### Ticket(int number);
+Constructs a Ticket by setting the **m_number** member variable
+#### Time time()const;
+A query that returns the time when the ticket was issued.
+#### int number()const;
+A query returning the number of the ticket
+#### void resetTime();
+Sets the Ticket time to the current time.
+### Virtual function overrides
+#### write
+Inserts a ticket into the ostream to be displayed on the console or inserts comma-separated ticket number and time into ostream based on the ostream reference being `cout` or not.
+#### read
+Extracts the ticket number and time in a comma-separated format from istream.
+
+## Utils Module
+A function called "strcmp" is added to the Utils module that works exactly like the strcmp in the `<cstring>` header file to run the tester progam in main.cpp. 
+
+Please copy and add it to your own Utils Module.
+
+
+## The Patient Module
+
+Develop an abstract base class named Patient, which inherits from the IOAble interface. The Patient class is designed to encapsulate the attributes and behaviors of a generic patient arriving at a healthcare facility. In subsequent stages of the project (specifically milestone 4), this Patient class will serve as a base class for two derived classes: TestPatient and TriagePatient. These derived classes will represent specific types of patients, each with their unique characteristics and needs. The Patient class, therefore, forms the foundation of our Pre-Triage management system in this healthcare context.
+
+Please note that the Patient class is abstract, meaning it cannot be instantiated directly. Instead, it defines a common interface for its derived classes. This design promotes code reuse and polymorphism, key principles of object-oriented programming.
+
+Remember, the purpose of this module is to provide a robust and flexible structure for managing two different types of patient types in the system. As you progress through the project, consider how the design of the Patient class and its derived classes can best meet this goal. 
+
+The following are the mandatory properties of the patient class.
+
+### Attributes of the Patient Class
+The `Patient` class must include the following member variables and objects:
+
+#### Patient name
+A dynamically allocated C-string, represented by a character pointer variable, is used to store the patient’s name. This allows for names of varying lengths to be stored efficiently. 
+
+> While the memory for the name attribute is dynamically allocated, we will operate under the assumption that a `Patient`'s name will not exceed 50 characters in length. If the input provided for the name attribute surpasses 50 characters, it should be silently truncated to the first 50 characters. This truncation should occur without raising any errors. This approach ensures that our program can handle a variety of input lengths while maintaining a consistent data structure size for the name attribute.
+
+#### OHIP number
+An integer attruibute is used to store the patient’s OHIP (Ontario Health Insurance Plan) number. This number should consist of exactly 9 digits, reflecting the standard format of OHIP numbers.
+#### Ticket
+A Ticket object is used to represent the patient’s ticket for the lineup. This object encapsulates all relevant information about the patient’s position in the queue, such as their arrival time and priority level.
+
+
+### Constructor 
+Instantiate a Patient object by providing a ticket number (an integer). This ticket number will be utilized to initialize the Ticket member attribute.
+
+### Copying and assignment.
+Ensure that a Patient object can be safely copied or assigned to another Patient without encountering memory leaks or any associated issues.
+
+### Destructor
+Implement a destructor for the Patient class that effectively deallocates any dynamically allocated memory, thereby preventing memory leaks.
+
+
+### Member functions
+#### char type()
+Create a pure virtual function called **type** that returns a character and is incapable of modifying the current object.
+In future derived objects, this function will return a single character that identifies the type of the patient (Contagion test patient or Triage patient).
+
+
+#### Operator== Overloads
+##### Patient Comparison to a Character
+Overload the `operator==` to compare the current object with a single character (the right operand). Return true if the values returned by the type function of this patient and the provided single character are identical. Note that this operator should not modify the current object.
+
+##### Comparing to Another Patient
+Overload the `operator==` to compare the current object to another patient. Return true if the type of the current patient is the same as the type of the other patient; otherwise, return false. This operator should not have the ability to modify either the current object or the right operand.
+
+#### Setting the Patient's Arrival Time
+Implement a modifier method named `setArrivalTime` within the Patient class. This method sets the time of the patient's ticket to the current time. It does not take any parameters and does not return any value.
+
+#### Getting the Patient's Arrival TIme
+Create a query method named `time` to retrieve the time of the patient's ticket and return it.
+
+#### Patient's Ticket Number
+Establish a query method named `number` that returns the number associated with the patient's ticket.
+
+### Cast Overloads
+#### Boolean
+When a patient is casted to a boolean, return true if the Patient is in a valid state; otherwise, return false.
+
+#### Const Character Pointer
+If a patient is casted to a constant character pointer, return the address of the patient's name.
+
+
+### pure virtual function overwrites.
+
+### Writing Patient Information into `ostream`
+This method inserts information into the ostream reference in three different formats based on the instance of the ostream. For `cout`, it inserts detailed information suitable for printing like a ticket in multiline format. For `clog`, it presumes a list is being printed, and therefore the information is inserted in a linear format suitable for a list. For any other object, it will insert the values in a comma-separated format suitable for saving in a file.
+
+Overwrite the `write` method to insert patient information into the `ostream` as follows:
+
+1. If the patient is being inserted into the `clog` object, the information is displayed in a linear format as follows:
+
+   - If the patient is in an invalid empty state 
+      - Insert "Invalid Patient Record".
+   - Otherwise
+      - Insert the name of the patient in 53 spaces, left-justified, padded with '.' characters.
+      - Insert the OHIP number.
+      - Insert the ticket number in 5 spaces, right-justified.
+      - Insert a space.
+      - Insert the ticket time.
+
+2. If the patient is being inserted into the `cout` object, the information is inserted as follows:
+
+   - If the patient is in an invalid empty state 
+      - Insert "Invalid Patient Record" and go to a newline.
+   - Otherwise
+      - Insert the member ticket object.
+      - Insert a newline character.
+      - Insert the patient's name.
+      - Insert ", OHIP: ".
+      - Insert the OHIP number.
+      - Insert a newline character.
+      - Return the ostream.
+
+3. If the patient is not being inserted into the `cout` or `clog` object, the information is presented in a comma-separated value format:
+
+   - Insert the following values into the ostream in a comma-separated format. After the values are inserted, add a single "comma", and then call the write function of the member ticket object. Finally, return the ostream.
+
+   - The sequence of values inserted into the ostream is as follows:
+
+      ```Text
+      returned value of the type() function
+      ','
+      name of the patient
+      ','
+      OHIP number
+      ','
+      ```
+     and then insert the ticket.
+
+
+### Reading Patient Information from `istream`
+Overwrite the read method to extract patient information from the `istream` as follows:
+
+If the information is being extracted from `cin` (user input over the console), the following actions are taken:
+
+- Display the prompt: "Name: ".
+- Extract the name of the patient from the `istream` up to 50 characters or the newline character into a local Cstring of 51 characters using `istream`'s `get`.
+- Copy the extracted name into dynamically allocated memory pointed by the name member variable, ensuring the name pointer is deleted before the allocation to prevent memory leaks.
+- Extract and ignore all characters up to and including the newline character.
+- Display the prompt: "OHIP: ".
+- Extract a 9-digit OHIP number from the istream. Validate it, ensuring it is between 100000000 and 999999999. Use the same error message format as the Menu item selection.
+- Return the istream reference at the end.
+
+Execution example:
+
+```Text
+Name: John Doe
+OHIP: abc
+Bad integer value, try again: 100
+Invalid value entered, retry [100000000 <= value <= 999999999]: 123123123
+```
+
+If the information is **not** being extracted from `cin`, presuming it is being read from a file, the information should be read in comma-separated format as follows:
+
+- Extract the name of the patient from the `istream` up to 50 characters or a comma character into a local Cstring of 51 characters.
+- Copy the extracted name into dynamically allocated memory pointed by the name member variable, ensuring the name pointer is deleted before the allocation to prevent memory leaks.
+- Extract and ignore all characters up to and including a comma character using istream's ignore.
+- Extract an integer from the istream into the OHIP member variable.
+- End the extraction by calling the read method of the patient's ticket.
+- Return the istream reference at the end.
+
+If, in any case, the istream fails to read the information, ensure that any dynamically allocated memory held by the name attribute is deleted, and the pointer is set to nullptr.
+
+
+
+## The tester program.
+[main.cpp](ms3/main.cpp) 
+
+## Correct output
+[correct_output.txt](ms3/correct_output.txt)
+
+
+### Submission
+
+Upload your source code and the tester program to your `matrix` account. Compile and run your code using the `g++` compiler [as shown in the introduction](#compiling-and-testing-your-program) and make sure that everything works properly.
+
+Then, run the following command from your account (replace `profname.proflastname` with your professor’s Seneca userid):
+```
+~profname.proflastname/submit 2??/prj/m?
+```
+and follow the instructions.
+
+- *2??* is replaced with your subject code
+- *m?* is replaced with the milestone (i.e. m1, m2, etc)
+
+### The submit program's options:
+```bash
+~prof_name.prof_lastname/submit DeliverableName [-submission options]<ENTER>
+[-submission option] acceptable values:
+  "-due":
+       Shows due dates only
+       This option cannot be used in combination with any other option.
+  "-skip_spaces":
+       Do the submission regardless of incorrect horizontal spacing.
+       This option may attract penalty.
+  "-skip_blank_lines":
+       Do the submission regardless of incorrect vertical spacing.
+       This option may attract penalty.
+  "-feedback":
+       Check the program execution without submission.
+```
+
 
 # Milestone 4
 
-## TBA
+Advance the development of the Pre-triage application by incorporating the `test patient` and `triage patien` modules into the system.
+
+## The TestPatient module
+This module has one integer global variable called **nextTestTicket** that is initialized to **one**.  This global variable will be used to determine what is the ticket number of the next contagion test Patient.  Each time a new **TestPatient** object is created the value of the **nextTestTicket** will be increased by **one**.  The scope of the global **nextTestTicket** variable is only the **TestPatient** module.
+
+The **TestPatient** class is publicly derived from the **Patient** class. The **TestPatient** class does not add any member variables or properties to the **Patient** module.
+
+The **TestPatient** class has one **default constructor**, implements the pure virtual **type()** function and re-implements the four **read and write** functions of the base class **Patient** as follows:
+
+### Default Constructor
+The default constructor passes the **nextTestTicket** global variable to the **constructor** of the base class **Patient** and then it will increase the value of **nextTestTicket** global variable by **one**.
+
+### the type() virtual function
+This function only returns the character **'C'**;
+
+### csvWrite virtual function override.
+This function only calls the **csvWrite** function of the base class **Patient** and returns the **ostream** reference.
+
+### csvRead virtual function override
+First this function will call the **csvRead** function of the base class **Patient**, then it will set the **nextTestTicket** global variable to the return value of the **number()** function of the **Patient** class plus **one**. 
+
+Finally, it will return the ~~ostream~~ istream reference.
+
+### write virtual function override.
+If the ostream is cout it will insert **"Contagion TEST"** into the **ostream** object and goes to **newline**. 
+
+Then it will call the **write()** function of the base class **Patient**.
+
+At end it will return the **ostream** reference.
+
+### read virtual function override. 
+It will call the read function of the base class **Patient**.
+
+If the istream is not cin (reading from a file) then it should set the **nextTestTicket** to the ticket number of this patient + 1. This will make sure the ticket numbers are correctly restored with records are being read from a file.
+
+Then it will return the **istream** reference.
+
+### Destructor
+This class does not need a custom destructor.
+
+### TestPatient tester and output
+[TstP_Tester.cpp](ms4/TstP_Tester.cpp)
+
+## The TriagePatient Module
+This module includes a single integer global variable called `nextTriageTicket` initialized to `one`. This global variable determines the ticket number of the next triage Patient. Each time a new TriagePatient is created, the value of `nextTriageTicket` increases by one. The scope of the global `nextTriageTicket` variable is limited to the `TriagePatient` module.
+
+The `TriagePatient` class is publicly derived from the `Patient` class. The `TriagePatient` class introduces one character pointer member variable to dynamically hold the symptoms of the arriving patient for the triage center.
+
+The `TriagePatient` class includes a default constructor, implements the pure virtual type() function, and re-implements the two read and write virtual functions of the base class `Patient`. It adheres to the rule of three in derived classes to properly manage the dynamically allocated memory of the class and the base class during copying and assignment.
+
+### Symptoms Character Pointer Member Variable
+Create a character pointer member variable to point to a dynamically allocated Cstring holding the list of symptoms of the `TriagePatient`. Although this characters Cstring is held dynamically but we will make sure it will not be more than 512 character. In such case where the lenght of the data exceeds 512, the data will be truncated and the rest of it will be silently ingnored. 
+
+
+### Default Constructor
+The default constructor initializes the character pointer member variable to null, passes the `nextTriageTicket` global variable to the constructor of the base class `Patient`, and then increases the value of `nextTriageTicket` by `one`.
+
+### the type() virtual function
+This function returns the character **'T'**;
+
+### write virtual function override.
+This function inserts the patient information into different instances of `ostream`.
+
+If the ostream reference is `cout`, it prints a "TRIAGE" label, inserts the patient, and displays the symptoms. If it is `clog`, it only prints the patient information in a linear format with no symptoms. If it is neither `cout` nor `clog`, it inserts the information in a comma-separated format.
+
+- If the `ostream` reference is `cout`
+   - Inserts the word `"TRIAGE"` into the `ostream` and goes to a newline.
+- Calls the patient's write method.
+- If the `ostream` reference is `cout`
+   - Inserts `"Symptoms: "` into the `ostream`.
+   - Inserts the patient's symptoms into the `ostream`.
+   - Goes to a newline.
+- If the ostream reference is not `clog` (clog is only used for linear printouts)
+   - Inserts a "`,`" and then the patient's symptoms.
+
+The function ends by returning the ostream reference.
+
+### read virtual function override. 
+This function extracts patient information from different instances of `istream`:
+
+- Console entry via `cin`
+- Comma-separated values entry via any other `istream` objects.
+
+It performs the following steps:
+
+- Deletes the memory pointed to by the symptoms member variable.
+- Calls the Read function of the base class `Patient`.
+- If the `istream` reference is not `cin`:
+   - Ignores the comma character.
+   - Reads the symptoms of the patient into a local Cstring character array, up to 511 characters or until a newline `('\n')` is encountered.
+   - Allocates memory and copies the local symptoms Cstring into the allocated memory.
+   - Sets the `nextTriageTicket` global variable to the return value of the `number()` member function of the `Patient` class plus `one`.
+- Otherwise:
+   - Displays the prompt `"Symptoms: "`.
+   - Reads the symptoms into the local Cstring, up to 511 characters.
+   - Allocates memory and copies the local symptoms Cstring into the allocated memory.
+
+In case the `istream` fails, it deletes the dynamically allocated memory and sets the pointer to nullptr.
+
+The function concludes by returning the istream reference.
+
+### Destructor
+Deletes the memory pointed by the [symptoms member variable](#symptoms-character-pointer-member-variable)
+
+## The TriagePatient Tester and output
+
+[TrgP_Tester.cpp](ms4/TrgPTester.cpp)
+
+
+## Milestone 4  tester program.
+
+[main.cpp](ms4/main.cpp)
+
+
+## Correct output
+
+[correct_output.txt](ms4/correct_output.txt)
+
+
+### Submission
+
+Upload your source code and the tester program to your `matrix` account. Compile and run your code using the `g++` compiler [as shown in the introduction](#compiling-and-testing-your-program) and make sure that everything works properly.
+
+Then, run the following command from your account (replace `profname.proflastname` with your professor’s Seneca userid):
+```
+~profname.proflastname/submit 2??/prj/m?
+```
+and follow the instructions.
+
+- *2??* is replaced with your subject code
+- *m?* is replaced with the milestone (i.e. m1, m2, etc)
+
+### The submit program's options:
+```bash
+~prof_name.prof_lastname/submit DeliverableName [-submission options]<ENTER>
+[-submission option] acceptable values:
+  "-due":
+       Shows due dates only
+       This option cannot be used in combination with any other option.
+  "-skip_spaces":
+       Do the submission regardless of incorrect horizontal spacing.
+       This option may attract penalty.
+  "-skip_blank_lines":
+       Do the submission regardless of incorrect vertical spacing.
+       This option may attract penalty.
+  "-feedback":
+       Check the program execution without submission.
+```
+
 
 # Milestone 5
 
+## TBA
