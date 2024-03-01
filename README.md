@@ -1,6 +1,7 @@
 # Project: Ontario Pre-Triage Application for Healthcare Facilities
-## Currect Project State
-MS1 & MS2 release
+## Current Project State
+- MS1 & MS2 release
+- MS3 & MS4 preview
 
 ## Milestones
 
