@@ -2,7 +2,7 @@
  * Name: Nathan Kong
  * Email: nkong@myseneca.ca
  * ID: 150950236
- * Date: 2024-03-05
+ * Date: 2024-03-07
  * 
  * I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
 */
@@ -12,7 +12,11 @@
 
 #include <iostream>
 
+using namespace std;
+
 namespace seneca {
+
+    const int H24_IN_M = 1440;
     class Time {
         unsigned int m_mins{0};
 
@@ -44,7 +48,7 @@ namespace seneca {
          * them with a leading zero. For example, it formats the times
          * as `03:02`, `16:55`, and `234:06`.
         */
-        std::ostream write() const;
+        ostream& write(ostream& ostr = cout) const;
 
         /**
          * This method reads the time from istream in the `H:M` format.
@@ -69,7 +73,7 @@ namespace seneca {
          * > function may check the istream state to ensure that the
          * > read operation was successful, if necessary.
         */
-        void read();
+        istream& read(istream& istr = cin);
 
         /**
          * This operator overloads the cast to `unsigned int` for the
@@ -115,14 +119,14 @@ namespace seneca {
          * Overload the insertion operator to be able to insert a Time object
          * into an ostream object as described in the write method.
         */
-        friend std::ostream& operator<<(std::ostream& ostr, const Time& T);
+        friend ostream& operator<<(ostream& ostr, const Time& T);
 
         /**
          * Overload the extraction operator to be able to extract data from an
          * istream object into the Time object as described in the read method.
         */
-        void operator>>(const Time& T);
+        friend istream& operator>>(istream& istr, Time& T);
     };
 }
 
-#endif
+#endif  // SENECA_TIME_H

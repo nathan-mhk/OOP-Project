@@ -2,13 +2,15 @@
  * Name: Nathan Kong
  * Email: nkong@myseneca.ca
  * ID: 150950236
- * Date: 2024-03-05
+ * Date: 2024-03-07
  * 
  * I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
 */
 
 #include "Time.h"
 #include "Utils.h"
+
+using namespace std;
 
 namespace seneca {
     /**
@@ -33,7 +35,7 @@ namespace seneca {
      * in the min parameter. If no value is provided, it defaults
      * to zero, effectively setting the time to zero.
     */
-    Time::Time(unsigned int min = 0u) : m_mins(min) {}
+    Time::Time(unsigned int min) : m_mins(min) {}
 
     /**
      * This method writes the time into ostream in the `HH:MM` format.
@@ -41,8 +43,17 @@ namespace seneca {
      * them with a leading zero. For example, it formats the times
      * as `03:02`, `16:55`, and `234:06`.
     */
-    std::ostream Time::write() const {
+    ostream& Time::write(ostream& ostr) const {
+        // Move .width and .fill to Utils?
+        ostr.width(2);
+        ostr.fill('0');
+        ostr << m_mins / 60 << ":";
 
+        ostr.width(2);
+        ostr.fill('0');
+        ostr << m_mins % 60;
+
+        return ostr;
     }
 
     /**
@@ -68,8 +79,20 @@ namespace seneca {
      * > function may check the istream state to ensure that the
      * > read operation was successful, if necessary.
     */
-    void Time::read() {
+    istream& Time::read(istream& istr) {
+        int hour = 0;
+        istr >> hour;
 
+        if (istr.peek() != ':') {
+            istr.setstate(ios::failbit);
+        } else {
+            istr.ignore();
+
+            int min = 0;
+            istr >> min;
+            m_mins = hour * 60 + min;
+        }
+        return istr;
     }
 
     /**
@@ -78,7 +101,7 @@ namespace seneca {
      * it will return the number of minutes held in the object.
     */
     Time::operator unsigned int()const {
-
+        return m_mins;
     }
 
     /**
@@ -88,7 +111,8 @@ namespace seneca {
      * object.
     */
     Time& Time::operator*=(int val) {
-
+        m_mins *= val;
+        return (*this);
     }
 
     /**
@@ -105,7 +129,11 @@ namespace seneca {
      *   ((1:00 + 24:00) - 22:00).
     */
     Time& Time::operator-=(const Time& D) {
+        if (m_mins < D.m_mins) m_mins += H24_IN_M;
 
+        m_mins -= D.m_mins;
+
+        return (*this);
     }
 
     /**
@@ -117,22 +145,26 @@ namespace seneca {
      * between the current `Time` object and the `Time` object `T`.
     */
     Time Time::operator-(const Time& T) const {
+        unsigned int m = m_mins < T.m_mins ? H24_IN_M : 0;
+        
+        m += m_mins - T.m_mins;
 
+        return Time(m);
     }
 
     /**
      * Overload the insertion operator to be able to insert a Time object
      * into an ostream object as described in the write method.
     */
-    std::ostream& operator<<(std::ostream& ostr, const Time& T) {
-
+    ostream& operator<<(ostream& ostr, const Time& T) {
+        return T.write(ostr);
     }
 
     /**
      * Overload the extraction operator to be able to extract data from an
      * istream object into the Time object as described in the read method.
     */
-    void Time::operator>>(const Time& T) {
-
+    istream& operator>>(istream& istr, Time& T) {
+        return T.read(istr);
     }
 }
