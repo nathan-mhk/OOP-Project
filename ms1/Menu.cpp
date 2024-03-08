@@ -8,8 +8,15 @@
 */
 
 #include "Menu.h"
+#include <cstring>
 
 namespace seneca {
+
+    ostream& Menu::printTabs(ostream& ostr) const {
+        for (int i = 0; i < m_numTabs; ++i) ostr << "   ";
+        return ostr;
+    }
+
     /**
      * This constructor is designed to initialize a `Menu` object. It takes
      * two parameters: a pointer to a character string `menuContent`, and an
@@ -25,13 +32,19 @@ namespace seneca {
      * formatting of the menu display. If not provided, no tabs will be
      * applied by default.
     */
-    Menu::Menu(const char* menuContent, int numberOfTabs) {
+    Menu::Menu(const char* menuContent, int numberOfTabs) : m_numTabs(numberOfTabs) {
+        m_text = new char[strlen(menuContent) + 1];
+        strcpy(m_text, menuContent);
 
+        for (size_t i = 0; i < strlen(m_text); ++i) {
+            if (m_text[i] == '\n') ++m_numOptions;
+        }
     }
 
     // Deallocates the dynamically allocated memory
     Menu::~Menu() {
-
+        delete[] m_text;
+        m_text = nullptr;
     }
 
     /**
@@ -78,8 +91,23 @@ namespace seneca {
      * presentation. This feature enhances the flexibility and user-
      * friendliness of your menu system.
     */
-    istream& Menu::display(istream& istr) {
-        return istr;
+    ostream& Menu::display(ostream& ostr) const {
+        char* tempStr = new char[strlen(m_text) + 1];
+        strcpy(tempStr, m_text);
+
+        char* opt = strtok(tempStr, "\n");
+
+        while (opt) {
+            printTabs(ostr) << opt << endl;
+            opt = strtok(nullptr, "\n");
+        }
+
+        printTabs(ostr) << "0- Exit" << endl;
+        printTabs(ostr) << "> ";
+
+        delete[] tempStr;
+
+        return ostr;
     }
 
     /**
@@ -111,7 +139,38 @@ namespace seneca {
      * 
      * `2` is returned as user's selection.
     */
-    int& Menu::operator>>(int& selection) {
-        return selection;
+    int& Menu::operator>>(int& Selection) {
+        display();
+
+        while (true) {
+            cin >> Selection;
+
+            if (cin.fail()) {
+                cout << "Bad integer value, try again: ";
+
+                cin.clear();
+                while (cin.peek() != '\n') cin.ignore();
+                continue;
+            }
+
+            if (cin.peek() != '\n') {
+                cout << "Only enter an integer, try again: ";
+
+                cin.clear();
+                while (cin.peek() != '\n') cin.ignore();
+                continue;
+            }
+
+            if (Selection < 0 || Selection > m_numOptions) {
+                cout << "Invalid value enterd, retry[0 <= value <= "<< m_numOptions << "]: ";
+                
+                cin.clear();
+                while (cin.peek() != '\n') cin.ignore();
+                continue;
+            }
+            break;
+        }
+        
+        return Selection;
     }
 }

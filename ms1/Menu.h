@@ -13,9 +13,11 @@ using namespace std;
 
 namespace seneca {
     class Menu {
-        const char* m_menuContent;
+        char* m_text{};
         int m_numOptions{0};
         int m_numTabs{0};
+
+        ostream& printTabs(ostream& ostr = cout) const;
 
     public:
 
@@ -34,7 +36,7 @@ namespace seneca {
          * formatting of the menu display. If not provided, no tabs will be
          * applied by default.
         */
-        Menu(const char* menuContent, int numberOfTabs);
+        Menu(const char* menuContent, int numberOfTabs = 0);
 
         // Deallocates the dynamically allocated memory
         ~Menu();
@@ -87,7 +89,7 @@ namespace seneca {
          * presentation. This feature enhances the flexibility and user-
          * friendliness of your menu system.
         */
-        istream& display(istream& istr = cin);
+        ostream& display(ostream& ostr = cout) const;
 
         /**
          * The member insertion operator first calls the display function and
@@ -118,6 +120,6 @@ namespace seneca {
          * 
          * `2` is returned as user's selection.
         */
-        int& operator>>(int& selection);
+        int& operator>>(int& Selection);
     };
 }
