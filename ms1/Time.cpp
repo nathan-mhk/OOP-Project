@@ -86,6 +86,7 @@ namespace seneca {
         if (istr.peek() != ':') {
             istr.setstate(ios::failbit);
         } else {
+            // Discard the `:` char
             istr.ignore();
 
             int min = 0;

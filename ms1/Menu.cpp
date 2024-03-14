@@ -9,6 +9,7 @@
 
 #include "Menu.h"
 #include <cstring>
+#include <limits>
 
 namespace seneca {
 
@@ -149,7 +150,7 @@ namespace seneca {
                 cout << "Bad integer value, try again: ";
 
                 cin.clear();
-                while (cin.peek() != '\n') cin.ignore();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 continue;
             }
 
@@ -157,7 +158,7 @@ namespace seneca {
                 cout << "Only enter an integer, try again: ";
 
                 cin.clear();
-                while (cin.peek() != '\n') cin.ignore();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 continue;
             }
 
@@ -165,7 +166,7 @@ namespace seneca {
                 cout << "Invalid value enterd, retry[0 <= value <= "<< m_numOptions << "]: ";
                 
                 cin.clear();
-                while (cin.peek() != '\n') cin.ignore();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 continue;
             }
             break;
