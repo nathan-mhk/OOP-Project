@@ -1,6 +1,6 @@
 # Project: Ontario Pre-Triage Application for Healthcare Facilities
 ## Currect Project State
-MS1 & MS2 release
+V1.1 MS4 (removed deprecated methods, `csvRead and csvWrite`)
 
 ## Milestones
 
@@ -777,14 +777,6 @@ The default constructor passes the **nextTestTicket** global variable to the **c
 
 ### the type() virtual function
 This function only returns the character **'C'**;
-
-### csvWrite virtual function override.
-This function only calls the **csvWrite** function of the base class **Patient** and returns the **ostream** reference.
-
-### csvRead virtual function override
-First this function will call the **csvRead** function of the base class **Patient**, then it will set the **nextTestTicket** global variable to the return value of the **number()** function of the **Patient** class plus **one**. 
-
-Finally, it will return the ~~ostream~~ istream reference.
 
 ### write virtual function override.
 If the ostream is cout it will insert **"Contagion TEST"** into the **ostream** object and goes to **newline**. 
