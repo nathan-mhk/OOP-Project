@@ -8,6 +8,8 @@
 */
 
 #include "Patient.h"
+#include "Utils.h"
+#include <cstring>
 
 namespace seneca {
     /**
@@ -15,17 +17,29 @@ namespace seneca {
      * integer). This ticket number will be utilized to initialize the
      * Ticket member attribute.
     */
-    Patient::Patient(int ticketNum) {
+    Patient::Patient(const int ticketNum) {
         m_ticket = new Ticket(ticketNum);
     }
 
-    Patient::Patient(Patient&) {}
+    Patient::Patient(const Patient& patient) {
+        *this = patient;
+    }
 
-    Patient& Patient::operator=(Patient& patient) {
-        return patient;
+    Patient& Patient::operator=(const Patient& patient) {
+        delete[] m_name;
+        m_name = new char[strlen(patient.m_name) + 1];
+
+        strcpy(m_name, patient.m_name);
+        m_ohipNum = patient.m_ohipNum;
+
+        delete m_ticket;
+        m_ticket = new Ticket(patient.m_ticket->number());
+
+        return (*this);
     }
 
     Patient::~Patient() {
+        delete[] m_name;
         delete m_ticket;
     }
 
@@ -33,29 +47,37 @@ namespace seneca {
      * Return true if the values returned by the `type` function of this
      * patient and the provided single character are identical.
     */
-    bool Patient::operator==(const char) const {
-        return false;
+    bool Patient::operator==(const char c) const {
+        return type() == c;
     }
 
     /**
      * Return true if the type of the current patient is the same as the
      * type of the other patient; otherwise, return false.
     */
-    bool Patient::operator==(const Patient&) const {
-        return false;
+    bool Patient::operator==(const Patient& patient) const {
+        return type() == patient.type();
     }
 
     /**
      * Sets the time of the patient's ticket to the current time
     */
-    void Patient::setArrivalTime() {}
+    void Patient::setArrivalTime() {
+        m_ticket->resetTime();
+    }
 
+    /**
+     * Retrieve the time of the patient's ticket and return it.
+    */
     Time Patient::time() const {
         return m_ticket->time();
     }
 
+    /**
+     * Returns the number associated with the patient's ticket.
+    */
     int Patient::number() const {
-        return 0;
+        return m_ticket->number();
     }
 
     /**
@@ -63,7 +85,7 @@ namespace seneca {
      * false.
     */
     Patient::operator bool() const {
-        return false;
+        return m_name == nullptr || m_name[0];
     }
 
     /**
@@ -128,7 +150,58 @@ namespace seneca {
      *        and then insert the ticket.
     */
     std::ostream& Patient::write(std::ostream& ostr) const {
+        if (&ostr == &std::clog) {
+            // clog
+            if (*this) {
+                 ostr << "Invalid Patient Record";
+            } else {
+                // Name
+                ostr.fill('.');
+                ostr.width(53);
+                ostr << std::left << m_name;
+
+                // OHIP
+                ostr << m_ohipNum;
+
+                // Ticket
+                ostr.fill(' ');
+                ostr.width(5);
+                ostr << std::right << m_ticket->number() << " " << m_ticket->time();
+
+            }
+        } else if (&ostr == &std::cout) {
+            // cout
+            if (*this) {
+                ostr << "Invalid Patient Record" << endl;
+            } else {
+                // Member ticket object
+                ostr << m_ticket << endl;
+                
+                // Name & OHIP
+                ostr << m_name << ", OHIP: " << m_ohipNum << endl;
+            }
+        } else {
+            // !clog || !cout
+            ostr << type() << "," << m_name << "," << m_ohipNum << "," << m_ticket;
+        }
         return ostr;
+    }
+
+    // Helper function
+    void getName(std::istream& istr, char* name) {
+        char tempName[NAME_LEN + 1] = { 0 };
+
+        istr.getline(tempName, NAME_LEN);
+
+        delete[] name;
+
+        if (istr.fail()) {
+            name = nullptr;
+            return;
+        }
+
+        name = new char[strlen(tempName) + 1];
+        strcpy(name, tempName);
     }
 
     /**
@@ -180,6 +253,47 @@ namespace seneca {
      * attribute is deleted, and the pointer is set to nullptr.
     */
     std::istream& Patient::read(std::istream& istr) {
+        if (&istr == &std::cin) {
+            // cin
+            // char name[NAME_LEN + 1] = { 0 };
+            // istr.getline(name, NAME_LEN);
+
+            // delete[] m_name;
+
+            // if (istr.fail()) {
+            //     m_name = nullptr;
+            //     return istr;
+            // }
+
+            // m_name = new char[strlen(name) + 1];
+            // strcpy(m_name, name);
+            getName(istr, m_name);
+
+            U.clearIstrBuffer(istr);
+
+            cout << "OHIP: ";
+            U.getInt(m_ohipNum, OHIP_MIN, OHIP_MAX);
+
+        } else {
+            // fstream
+            // char name[NAME_LEN + 1] = { 0 };
+            // istr.getline(name, NAME_LEN);
+
+            // delete[] m_name;
+
+            // if (istr.fail()) {
+            //     m_name = nullptr;
+            //     return istr;
+            // }
+
+            // m_name = new char[strlen(name) + 1];
+            // strcpy(m_name, name);
+
+            U.clearIstrBuffer(istr, ',');
+            istr >> m_ohipNum;
+            istr >> *m_ticket;
+
+        }
         return istr;
     }
 }

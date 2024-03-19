@@ -16,10 +16,13 @@
 namespace seneca {
 
     const int NAME_LEN = 50;
+    const int OHIP_MIN = 100000000;
+    const int OHIP_MAX = 999999999;
+
     class Patient : public IOAble {
-        char m_name[NAME_LEN + 1] {};
+        char* m_name {};
         int m_ohipNum {};
-        Ticket* m_ticket;
+        Ticket* m_ticket {};
 
     public:
         /**
@@ -27,9 +30,9 @@ namespace seneca {
          * integer). This ticket number will be utilized to initialize the
          * Ticket member attribute.
         */
-        Patient(int);
-        Patient(Patient&);
-        Patient& operator=(Patient&);
+        Patient(const int);
+        Patient(const Patient&);
+        Patient& operator=(const Patient&);
         ~Patient();
 
         /**
@@ -51,12 +54,18 @@ namespace seneca {
         bool operator==(const Patient&) const;
 
         /**
-         * Sets the time of the patient's ticket to the current time
+         * Sets the time of the patient's ticket to the current time.
         */
         void setArrivalTime();
 
+        /**
+         * Retrieve the time of the patient's ticket and return it.
+        */
         Time time() const;
 
+        /**
+         * Returns the number associated with the patient's ticket.
+        */
         int number() const;
 
         /**
