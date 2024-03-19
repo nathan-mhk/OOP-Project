@@ -1,6 +1,7 @@
 # Project: Ontario Pre-Triage Application for Healthcare Facilities
-## Currect Project State
-V1.1 MS4 (removed deprecated methods, `csvRead and csvWrite`)
+## Current Project State
+- MS1 & MS2 release
+- MS3 & MS4 release<br />V1.1 MS4 (removed deprecated methods, `csvRead and csvWrite`)
 
 ## Milestones
 
