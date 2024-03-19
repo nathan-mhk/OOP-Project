@@ -1,6 +1,6 @@
 # Project: Ontario Pre-Triage Application for Healthcare Facilities
 ## Current Project State
-- MS1 & MS2 release
+- MS1 & MS2 release <br /> V1.2 Clarified the insertion and extraction operator overloads
 - MS3 & MS4 release<br />V1.1 MS4 (removed deprecated methods, `csvRead and csvWrite`)
 
 ## Milestones
@@ -308,6 +308,8 @@ Time operator-(const Time& T)const;
 This operator performs the same calculation as the subtraction assignment `-=` overload, except that it does not have a side effect (i.e., it does not modify the current object).
 
 It returns a new `Time` object representing the time difference between the current `Time` object and the `Time` object `T`.
+
+### Helper Insertion and Extraction Overloads
 
 ```c++
 operator<<
