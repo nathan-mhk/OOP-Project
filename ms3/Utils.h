@@ -48,11 +48,23 @@ namespace seneca {
       /// <param name="s2">Cstring</param>
       /// <returns> &gt;0 if s1 &gt; s2  OR  &lt;0 if s1 &lt; s2 OR 0 if s1 = s2</returns>
       int strcmp(const char* s1, const char* s2)const;
+
+      /// @brief Clear the istream buffer
+      /// @param istr the istream buffer to be cleared. Default `cin`
+      /// @param delim - the delimiter of the buffer to be cleared up to. Default `\n`.
+      void clearIstrBuffer(std::istream& istr = std::cin, const char delim = '\n');
+
+      /// @brief Get an integer [min, max] from user through `cin`
+      /// @param value - the integer value to be stored in
+      /// @param min - the min. acceptable value, inclusive
+      /// @param max - the max. acceptable value, inclusive
+      /// @return the reference variable of `value`
+      int& getInt(int& value, const int min, const int max);
    };
    /// <summary>
-      /// making seneca::debug variable global to all the files
-      /// which include "Utils.h"
-      /// </summary>
+   /// making seneca::debug variable global to all the files
+   /// which include "Utils.h"
+   /// </summary>
    extern bool debug;
    /// <summary>
    /// making seneca::U "Utils" object global to all the files which include "Utils.h"

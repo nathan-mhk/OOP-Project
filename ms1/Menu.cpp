@@ -8,8 +8,8 @@
 */
 
 #include "Menu.h"
+#include "Utils.h"
 #include <cstring>
-#include <limits>
 
 namespace seneca {
 
@@ -142,36 +142,6 @@ namespace seneca {
     */
     int& Menu::operator>>(int& Selection) {
         display();
-
-        while (true) {
-            cin >> Selection;
-
-            if (cin.fail()) {
-                cout << "Bad integer value, try again: ";
-
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                continue;
-            }
-
-            if (cin.peek() != '\n') {
-                cout << "Only enter an integer, try again: ";
-
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                continue;
-            }
-
-            if (Selection < 0 || Selection > m_numOptions) {
-                cout << "Invalid value enterd, retry[0 <= value <= "<< m_numOptions << "]: ";
-                
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                continue;
-            }
-            break;
-        }
-        
-        return Selection;
+        return U.getInt(Selection, 0, m_numOptions);
     }
 }

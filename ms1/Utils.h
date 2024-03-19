@@ -41,7 +41,17 @@ namespace seneca {
       /// <returns>the current time in minutes</returns>
       int getTime(); // returns the time of day in minutes
 
-     
+      /// @brief Clear the istream buffer
+      /// @param istr - the istream buffer to be cleared. Default `cin`
+      /// @param delim - the delimiter of the buffer to be cleared up to. Default `\n`.
+      void clearIstrBuffer(std::istream& istr = std::cin, const char delim = '\n');
+
+      /// @brief Get an integer [min, max] from user through `cin`
+      /// @param value - the integer value to be stored in
+      /// @param min - the min. acceptable value, inclusive
+      /// @param max - the max. acceptable value, inclusive
+      /// @return the reference variable of `value`
+      int& getInt(int& value, const int min, const int max);
    };
 
    /// <summary>

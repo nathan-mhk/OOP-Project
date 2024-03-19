@@ -13,6 +13,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <limits>
 #include "Utils.h"
 #include "Time.h"
 using namespace std;
@@ -43,6 +44,41 @@ namespace seneca {
       int i;
       for (i = 0; s1[i] && s2[i] && s1[i] == s2[i]; i++);
       return s1[i] - s2[i];
+   }
+
+   void Utils::clearIstrBuffer(std::istream& istr, const char delim) {
+      istr.ignore(numeric_limits<streamsize>::max(), delim);
+   }
+
+   int& Utils::getInt(int& value, const int min, const int max) {
+      while (true) {
+         cin >> value;
+
+         if (cin.fail()) {
+               cout << "Bad integer value, try again: ";
+
+               cin.clear();
+               clearIstrBuffer();
+               continue;
+         }
+
+         if (cin.peek() != '\n') {
+               cout << "Only enter an integer, try again: ";
+
+               cin.clear();
+               clearIstrBuffer();
+               continue;
+         }
+
+         if (value < 0 || value > max) {
+               cout << "Invalid value enterd, retry[" << min << " <= value <= "<< max << "]: ";
+               
+               cin.clear();
+               clearIstrBuffer();
+               continue;
+         }
+         return value;
+      }
    }
    // end provided code
 }
