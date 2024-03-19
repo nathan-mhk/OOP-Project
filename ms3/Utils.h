@@ -59,7 +59,7 @@ namespace seneca {
       /// @param min - the min. acceptable value, inclusive
       /// @param max - the max. acceptable value, inclusive
       /// @return the reference variable of `value`
-      int& getInt(int& value, const int min, const int max);
+      int& getInt(int& value, const int& min, const int& max);
    };
    /// <summary>
    /// making seneca::debug variable global to all the files

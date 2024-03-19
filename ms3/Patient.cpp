@@ -175,33 +175,16 @@ namespace seneca {
                 ostr << "Invalid Patient Record" << endl;
             } else {
                 // Member ticket object
-                ostr << m_ticket << endl;
+                ostr << *m_ticket << endl;
                 
                 // Name & OHIP
                 ostr << m_name << ", OHIP: " << m_ohipNum << endl;
             }
         } else {
             // !clog || !cout
-            ostr << type() << "," << m_name << "," << m_ohipNum << "," << m_ticket;
+            ostr << type() << "," << m_name << "," << m_ohipNum << "," << *m_ticket;
         }
         return ostr;
-    }
-
-    // Helper function
-    void getName(std::istream& istr, char* name) {
-        char tempName[NAME_LEN + 1] = { 0 };
-
-        istr.getline(tempName, NAME_LEN);
-
-        delete[] name;
-
-        if (istr.fail()) {
-            name = nullptr;
-            return;
-        }
-
-        name = new char[strlen(tempName) + 1];
-        strcpy(name, tempName);
     }
 
     /**
@@ -253,46 +236,34 @@ namespace seneca {
      * attribute is deleted, and the pointer is set to nullptr.
     */
     std::istream& Patient::read(std::istream& istr) {
+        if (&istr == &std::cin) cout << "Name: ";
+
+        m_name = new char[NAME_LEN + 1];
+        istr.getline(m_name, NAME_LEN);
+
+        if (istr.fail()) {
+            delete[] m_name;
+            m_name = nullptr;
+            return istr;
+        }
+
+        char* tmp = m_name;
+        m_name = new char[strlen(m_name) + 1];
+        strcpy(m_name, tmp);
+        delete[] tmp;
+
         if (&istr == &std::cin) {
             // cin
-            // char name[NAME_LEN + 1] = { 0 };
-            // istr.getline(name, NAME_LEN);
-
-            // delete[] m_name;
-
-            // if (istr.fail()) {
-            //     m_name = nullptr;
-            //     return istr;
-            // }
-
-            // m_name = new char[strlen(name) + 1];
-            // strcpy(m_name, name);
-            getName(istr, m_name);
-
-            U.clearIstrBuffer(istr);
+            U.clearIstrBuffer();
 
             cout << "OHIP: ";
             U.getInt(m_ohipNum, OHIP_MIN, OHIP_MAX);
 
         } else {
             // fstream
-            // char name[NAME_LEN + 1] = { 0 };
-            // istr.getline(name, NAME_LEN);
-
-            // delete[] m_name;
-
-            // if (istr.fail()) {
-            //     m_name = nullptr;
-            //     return istr;
-            // }
-
-            // m_name = new char[strlen(name) + 1];
-            // strcpy(m_name, name);
-
             U.clearIstrBuffer(istr, ',');
             istr >> m_ohipNum;
             istr >> *m_ticket;
-
         }
         return istr;
     }

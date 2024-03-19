@@ -42,7 +42,7 @@ namespace seneca {
       istr.ignore(numeric_limits<streamsize>::max(), delim);
    }
 
-   int& Utils::getInt(int& value, const int min, const int max) {
+   int& Utils::getInt(int& value, const int& min, const int& max) {
       while (true) {
          cin >> value;
 
@@ -62,7 +62,7 @@ namespace seneca {
                continue;
          }
 
-         if (value < 0 || value > max) {
+         if (value < min || value > max) {
                cout << "Invalid value enterd, retry[" << min << " <= value <= "<< max << "]: ";
                
                cin.clear();
