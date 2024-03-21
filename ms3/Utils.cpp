@@ -9,6 +9,15 @@
 // -----------------------------------------------------------
 // Name                 Date            Reason
 ***********************************************************************/
+/**
+ * Name: Nathan Kong
+ * Email: nkong@myseneca.ca
+ * ID: 150950236
+ * Date: 2024-03-18
+ * 
+ * I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
+*/
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <cstdlib>
@@ -45,6 +54,7 @@ namespace seneca {
       for (i = 0; s1[i] && s2[i] && s1[i] == s2[i]; i++);
       return s1[i] - s2[i];
    }
+   // end provided code
 
    void Utils::clearIstrBuffer(std::istream& istr, const char delim) {
       istr.ignore(numeric_limits<streamsize>::max(), delim);
@@ -80,5 +90,4 @@ namespace seneca {
          return value;
       }
    }
-   // end provided code
 }
