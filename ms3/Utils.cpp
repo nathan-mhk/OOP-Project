@@ -75,7 +75,6 @@ namespace seneca {
          if (cin.peek() != '\n') {
                cout << "Only enter an integer, try again: ";
 
-               cin.clear();
                clearIstrBuffer();
                continue;
          }
@@ -83,10 +82,10 @@ namespace seneca {
          if (value < min || value > max) {
                cout << "Invalid value enterd, retry[" << min << " <= value <= "<< max << "]: ";
                
-               cin.clear();
                clearIstrBuffer();
                continue;
          }
+         clearIstrBuffer();
          return value;
       }
    }

@@ -9,6 +9,15 @@
 // -----------------------------------------------------------
 // Name                 Date            Reason
 ***********************************************************************/
+/**
+ * Name: Nathan Kong
+ * Email: nkong@myseneca.ca
+ * ID: 150950236
+ * Date: 2024-03-18
+ * 
+ * I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
+*/
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <cstdlib>
 #include <ctime>
@@ -57,7 +66,6 @@ namespace seneca {
          if (cin.peek() != '\n') {
                cout << "Only enter an integer, try again: ";
 
-               cin.clear();
                clearIstrBuffer();
                continue;
          }
@@ -65,10 +73,10 @@ namespace seneca {
          if (value < min || value > max) {
                cout << "Invalid value enterd, retry[" << min << " <= value <= "<< max << "]: ";
                
-               cin.clear();
                clearIstrBuffer();
                continue;
          }
+         clearIstrBuffer();
          return value;
       }
    }

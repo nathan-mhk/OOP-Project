@@ -9,6 +9,15 @@
 // -----------------------------------------------------------
 // Name                 Date            Reason
 ***********************************************************************/
+/**
+ * Name: Nathan Kong
+ * Email: nkong@myseneca.ca
+ * ID: 150950236
+ * Date: 2024-03-18
+ * 
+ * I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
+*/
+
 #ifndef SENECA_UTILS_H_
 #define SENECA_UTILS_H_
 #include <iostream>
@@ -43,7 +52,7 @@ namespace seneca {
 
       /// @brief Clear the istream buffer
       /// @param istr - the istream buffer to be cleared. Default `cin`
-      /// @param delim - the delimiter of the buffer to be cleared up to. Default `\n`.
+      /// @param delim - the delimiter of the buffer to be cleared up to. Default `\\n`.
       void clearIstrBuffer(std::istream& istr = std::cin, const char delim = '\n');
 
       /// @brief Get an integer [min, max] from user through `cin`
