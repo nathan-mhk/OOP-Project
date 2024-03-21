@@ -81,7 +81,7 @@ namespace seneca {
      * false.
     */
     Patient::operator bool() const {
-        return m_name == nullptr;
+        return m_name != nullptr;
     }
 
     /**
@@ -148,7 +148,7 @@ namespace seneca {
     std::ostream& Patient::write(std::ostream& ostr) const {
         if (&ostr == &std::clog) {
             // clog
-            if (*this) {
+            if (!*this) {
                  ostr << "Invalid Patient Record";
             } else {
                 // Name
@@ -167,7 +167,7 @@ namespace seneca {
             }
         } else if (&ostr == &std::cout) {
             // cout
-            if (*this) {
+            if (!*this) {
                 ostr << "Invalid Patient Record" << endl;
             } else {
                 // Member ticket object
