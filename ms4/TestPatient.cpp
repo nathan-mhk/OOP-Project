@@ -10,5 +10,22 @@
 #include "TestPatient.h"
 
 namespace seneca {
-    
+    int TestPatient::nextTestTicket = 1;
+
+    TestPatient::TestPatient() : Patient(nextTestTicket++) {}
+
+    char TestPatient::type() const { return 'C'; }
+
+    std::ostream& TestPatient::write(std::ostream& ostr) const {
+        if (&ostr == &std::cout) std::cout << "Contagion TEST" << endl;
+        return Patient::write(ostr);
+    }
+
+    std::istream& TestPatient::read(std::istream& istr) {
+        Patient::read(istr);
+
+        if (&istr != &std::cin) nextTestTicket = number() + 1;
+
+        return istr;
+    }
 }

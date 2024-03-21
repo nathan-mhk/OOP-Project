@@ -10,8 +10,21 @@
 #ifndef TEST_PATIENT_H
 #define TEST_PATIENT_H
 
+#include "Patient.h"
+
 namespace seneca {
-    int nextTestTicket = 1;
+    class TestPatient : public Patient {
+        static int nextTestTicket;
+
+    public:
+        TestPatient();
+
+        virtual char type() const;
+
+        virtual std::ostream& write(std::ostream& ostr = cout) const;
+
+        virtual std::istream& read(std::istream& istr = cin);
+    };
 }
 
 #endif
