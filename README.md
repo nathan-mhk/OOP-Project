@@ -1,7 +1,7 @@
 # Project: Ontario Pre-Triage Application for Healthcare Facilities
 ## Current Project State
-- MS1 & MS2 release
-- MS3 & MS4 preview
+- MS1 & MS2 release <br /> V1.2 Clarified the insertion and extraction operator overloads
+- MS3 & MS4 release<br />V1.1 MS4 (removed deprecated methods, `csvRead and csvWrite`)
 
 ## Milestones
 
@@ -308,6 +308,8 @@ Time operator-(const Time& T)const;
 This operator performs the same calculation as the subtraction assignment `-=` overload, except that it does not have a side effect (i.e., it does not modify the current object).
 
 It returns a new `Time` object representing the time difference between the current `Time` object and the `Time` object `T`.
+
+### Helper Insertion and Extraction Overloads
 
 ```c++
 operator<<
@@ -778,14 +780,6 @@ The default constructor passes the **nextTestTicket** global variable to the **c
 
 ### the type() virtual function
 This function only returns the character **'C'**;
-
-### csvWrite virtual function override.
-This function only calls the **csvWrite** function of the base class **Patient** and returns the **ostream** reference.
-
-### csvRead virtual function override
-First this function will call the **csvRead** function of the base class **Patient**, then it will set the **nextTestTicket** global variable to the return value of the **number()** function of the **Patient** class plus **one**. 
-
-Finally, it will return the ~~ostream~~ istream reference.
 
 ### write virtual function override.
 If the ostream is cout it will insert **"Contagion TEST"** into the **ostream** object and goes to **newline**. 
