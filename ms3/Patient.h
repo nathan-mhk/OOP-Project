@@ -22,7 +22,7 @@ namespace seneca {
     class Patient : public IOAble {
         char* m_name {};
         int m_ohipNum {};
-        Ticket* m_ticket {};
+        Ticket m_ticket {};
 
     public:
         /**

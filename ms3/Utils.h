@@ -51,7 +51,7 @@ namespace seneca {
 
       /// @brief Clear the istream buffer
       /// @param istr the istream buffer to be cleared. Default `cin`
-      /// @param delim - the delimiter of the buffer to be cleared up to. Default `\n`.
+      /// @param delim - the delimiter of the buffer to be cleared up to. Default `\\n`.
       void clearIstrBuffer(std::istream& istr = std::cin, const char delim = '\n');
 
       /// @brief Get an integer [min, max] from user through `cin`

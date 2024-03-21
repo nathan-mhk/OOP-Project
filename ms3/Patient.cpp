@@ -17,30 +17,26 @@ namespace seneca {
      * integer). This ticket number will be utilized to initialize the
      * Ticket member attribute.
     */
-    Patient::Patient(const int ticketNum) {
-        m_ticket = new Ticket(ticketNum);
-    }
+    Patient::Patient(const int ticketNum) : m_ticket(ticketNum) {}
 
     Patient::Patient(const Patient& patient) {
-        *this = patient;
+        this->operator=(patient);
     }
 
     Patient& Patient::operator=(const Patient& patient) {
         delete[] m_name;
         m_name = new char[strlen(patient.m_name) + 1];
-
         strcpy(m_name, patient.m_name);
+
         m_ohipNum = patient.m_ohipNum;
 
-        delete m_ticket;
-        m_ticket = new Ticket(patient.m_ticket->number());
+        m_ticket = patient.m_ticket;
 
         return (*this);
     }
 
     Patient::~Patient() {
         delete[] m_name;
-        delete m_ticket;
     }
 
     /**
@@ -63,21 +59,21 @@ namespace seneca {
      * Sets the time of the patient's ticket to the current time
     */
     void Patient::setArrivalTime() {
-        m_ticket->resetTime();
+        m_ticket.resetTime();
     }
 
     /**
      * Retrieve the time of the patient's ticket and return it.
     */
     Time Patient::time() const {
-        return m_ticket->time();
+        return m_ticket.time();
     }
 
     /**
      * Returns the number associated with the patient's ticket.
     */
     int Patient::number() const {
-        return m_ticket->number();
+        return m_ticket.number();
     }
 
     /**
@@ -85,7 +81,7 @@ namespace seneca {
      * false.
     */
     Patient::operator bool() const {
-        return m_name == nullptr || m_name[0];
+        return m_name == nullptr;
     }
 
     /**
@@ -166,7 +162,7 @@ namespace seneca {
                 // Ticket
                 ostr.fill(' ');
                 ostr.width(5);
-                ostr << std::right << m_ticket->number() << " " << m_ticket->time();
+                ostr << std::right << m_ticket.number() << " " << m_ticket.time();
 
             }
         } else if (&ostr == &std::cout) {
@@ -175,14 +171,14 @@ namespace seneca {
                 ostr << "Invalid Patient Record" << endl;
             } else {
                 // Member ticket object
-                ostr << *m_ticket << endl;
+                ostr << m_ticket << endl;
                 
                 // Name & OHIP
                 ostr << m_name << ", OHIP: " << m_ohipNum << endl;
             }
         } else {
             // !clog || !cout
-            ostr << type() << "," << m_name << "," << m_ohipNum << "," << *m_ticket;
+            ostr << type() << "," << m_name << "," << m_ohipNum << "," << m_ticket;
         }
         return ostr;
     }
@@ -236,34 +232,37 @@ namespace seneca {
      * attribute is deleted, and the pointer is set to nullptr.
     */
     std::istream& Patient::read(std::istream& istr) {
-        if (&istr == &std::cin) cout << "Name: ";
+        char delim = ',';
+        if (&istr == &std::cin) {
+            cout << "Name: ";
+            delim = '\n';
+        }
 
-        m_name = new char[NAME_LEN + 1];
-        istr.getline(m_name, NAME_LEN);
+        char tmpName[NAME_LEN + 1] = { 0 };
+        istr.get(tmpName, NAME_LEN + 1, delim);
+
+        delete[] m_name;
 
         if (istr.fail()) {
-            delete[] m_name;
             m_name = nullptr;
             return istr;
         }
 
-        char* tmp = m_name;
-        m_name = new char[strlen(m_name) + 1];
-        strcpy(m_name, tmp);
-        delete[] tmp;
+        m_name = new char[strlen(tmpName) + 1];
+        strcpy(m_name, tmpName);
+        U.clearIstrBuffer(istr, delim);
 
         if (&istr == &std::cin) {
             // cin
-            U.clearIstrBuffer();
-
             cout << "OHIP: ";
             U.getInt(m_ohipNum, OHIP_MIN, OHIP_MAX);
 
         } else {
             // fstream
-            U.clearIstrBuffer(istr, ',');
             istr >> m_ohipNum;
-            istr >> *m_ticket;
+            U.clearIstrBuffer(istr, delim);
+
+            istr >> m_ticket;
         }
         return istr;
     }

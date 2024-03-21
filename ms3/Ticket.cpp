@@ -2,9 +2,8 @@
 #include "Ticket.h"
 using namespace std;
 namespace seneca {
-   Ticket::Ticket(int number) {
-      m_number = number;
-   }
+   Ticket::Ticket(int number) : m_number(number) {}
+   
    Time Ticket::time() const
    {
       return m_time;
