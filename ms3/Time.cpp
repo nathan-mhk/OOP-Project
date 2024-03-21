@@ -26,7 +26,7 @@ namespace seneca {
     */
     Time& Time::reset() {
         m_mins = U.getTime();
-        return (*this);
+        return *this;
     }
 
     /**
@@ -113,7 +113,7 @@ namespace seneca {
     */
     Time& Time::operator*=(int val) {
         m_mins *= val;
-        return (*this);
+        return *this;
     }
 
     /**
@@ -134,7 +134,7 @@ namespace seneca {
 
         m_mins -= D.m_mins;
 
-        return (*this);
+        return *this;
     }
 
     /**

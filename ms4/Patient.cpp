@@ -24,15 +24,16 @@ namespace seneca {
     }
 
     Patient& Patient::operator=(const Patient& patient) {
-        delete[] m_name;
-        m_name = new char[strlen(patient.m_name) + 1];
-        strcpy(m_name, patient.m_name);
+        if (this != &patient) {
+            delete[] m_name;
+            m_name = new char[strlen(patient.m_name) + 1];
+            strcpy(m_name, patient.m_name);
 
-        m_ohipNum = patient.m_ohipNum;
+            m_ohipNum = patient.m_ohipNum;
 
-        m_ticket = patient.m_ticket;
-
-        return (*this);
+            m_ticket = patient.m_ticket;
+        }
+        return *this;
     }
 
     Patient::~Patient() {
@@ -163,7 +164,6 @@ namespace seneca {
                 ostr.fill(' ');
                 ostr.width(5);
                 ostr << std::right << m_ticket.number() << " " << m_ticket.time();
-
             }
         } else if (&ostr == &std::cout) {
             // cout
@@ -250,6 +250,7 @@ namespace seneca {
 
         m_name = new char[strlen(tmpName) + 1];
         strcpy(m_name, tmpName);
+
         U.clearIstrBuffer(istr, delim);
 
         if (&istr == &std::cin) {

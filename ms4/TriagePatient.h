@@ -13,7 +13,19 @@
 #include "Patient.h"
 
 namespace seneca {
-    class TriagePatient : public Patient {};
+    class TriagePatient : public Patient {
+        static int nextTriageTicket;
+        char* m_symptoms {};
+        void copySymptoms(const char* symptoms);
+    public:
+        TriagePatient();
+        ~TriagePatient();
+        TriagePatient(const TriagePatient& triagePatient);
+        TriagePatient& operator=(const TriagePatient& triagePatient);
+        virtual char type() const;
+        virtual std::ostream& write(std::ostream& ostr = cout) const;
+        virtual std::istream& read(std::istream& istr = cin);
+    };
 }
 
 #endif

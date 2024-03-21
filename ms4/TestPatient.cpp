@@ -17,7 +17,7 @@ namespace seneca {
     char TestPatient::type() const { return 'C'; }
 
     std::ostream& TestPatient::write(std::ostream& ostr) const {
-        if (&ostr == &std::cout) std::cout << "Contagion TEST" << endl;
+        if (&ostr == &std::cout) ostr << "Contagion TEST" << endl;
         return Patient::write(ostr);
     }
 
