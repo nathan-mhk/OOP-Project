@@ -33,13 +33,29 @@ the buffer in the very end of **all** of the operator>> functions. The input
 buffer shall only be cleared by the caller to the function. If this "style" is 
 not consistent across the classes, it could be a huge hassle to fix the bug if 
 it did happened.
+
 Another challenges I faced the most is understanding the requirements of the 
 milestone (the description of the functions/classes that we are required to 
 implement). A lot of times the wordings/phrases are not clear enough/contains 
 ambiguity on what the function is suppose to do. I must take a guess on it, and 
 then inspect either the sample output, or the main program, to make my guess 
 more accurate. However, at the same time, the requirements is usually quite 
-lengthy.
+lengthy. On top of that, there are sometimes contradictions between the 
+requirements descriptions and the sample output. For instance, the description 
+of the function `PreTriage::admit()` are as follow:
+```
+- print: "Call time [H:M]"
+- go to newline
+- print: "Calling for "
+```
+
+However, the correct output (as seen in `ms53_correct_output.txt`) should be:
+```
+- print: "Call time: [H:M]"
+- go to newline
+- print: "Calling at for "
+```
+
 With this 2 challenges, the most time consuming part of me working on the 
 project is usually 1. reading and understanding the requirements. 2. fixing 
 non-logical bugs/bugs that are not really related to the program flow (the 

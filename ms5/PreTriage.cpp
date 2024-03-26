@@ -169,7 +169,8 @@ namespace seneca {
         if (m_numPatients)
             cout << m_numPatients << " Records imported..." << endl;
         else
-            cout << "No data or bad data file!" << endl << endl;
+            cout << "No data or bad data file!" << endl;
+        cout << endl;
 
         ifstr.close();
     }
@@ -257,12 +258,12 @@ namespace seneca {
             return;
         }
 
-        Patient* patient = m_patients[m_numPatients];
+        Patient*& patient = m_patients[m_numPatients];
 
         switch (
             getMenuOpt(
                 Menu(
-                    "Select Type of Registration\n1- Contagion Test\n2- Triage", 1))) {
+                    "Select Type of Registration:\n1- Contagion Test\n2- Triage", 1))) {
             case 0:
                 return;
             case 1:
@@ -278,7 +279,7 @@ namespace seneca {
 
         patient->setArrivalTime();
 
-        cout << "Please enter patient information: ";
+        cout << "Please enter patient information: " << endl;
         cin >> *patient;
         cout << endl;
 
@@ -355,8 +356,8 @@ namespace seneca {
 
         cout << endl;
         cout << "******************************************" << endl;
-        cout << "Call time [" << Time(U.getTime()) << "]" << endl;
-        cout << "Calling for " << patient;
+        cout << "Call time: [" << Time(U.getTime()) << "]" << endl;
+        cout << "Calling at for " << patient;
         cout << "******************************************" << endl
              << endl;
 
@@ -404,12 +405,12 @@ namespace seneca {
         if (i < 0) {
             clog << "Line up is empty!" << endl;
         } else {
-            clog << *m_patients[i++];
-
-            for (; i < m_numPatients; ++i) {
+            for (int j = 1; i < m_numPatients; ++i) {
                 const Patient& patient = *m_patients[i];
                 if (patient == patientType) {
-                    clog << patient;
+                    clog.width(3);
+                    clog.fill(' ');
+                    clog << std::left << j++ << " - " << patient << endl;;
                 }
             }
         }
