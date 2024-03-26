@@ -7,7 +7,17 @@
  * I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
 */
 
+#include <iostream>
+#include <fstream>
+#include <cstring>
+
 #include "PreTriage.h"
+#include "Utils.h"
+#include "Menu.h"
+#include "TestPatient.h"
+#include "TriagePatient.h"
+
+using namespace std;
 
 namespace seneca {
     /**
@@ -17,6 +27,13 @@ namespace seneca {
      *   to the number of patients found.
     */
     Time PreTriage::getWaitTime(const Patient& patient) const {
+        int num = 0;
+        for (int i = indexOfFirstInLine(patient.type()); i >= 0 && i < m_numPatients; ++i) {
+            if (*m_patients[i] == patient) ++num;
+        }
+        if (patient == CONTAGION) return Time(m_avgWaitContagion * num);
+        if (patient == TRIAGE) return Time(m_avgWaitTriage * num);
+        return Time(-1);    // This shouldn't happen?
     }
 
     /**
@@ -33,7 +50,18 @@ namespace seneca {
      * AWT = ((CT - PTT) + (AWT * (PTN - 1))) / PTN
      * ```
     */
-    void PreTriage::setAverageWaitTime(const Patient& patient) {}
+    void PreTriage::setAverageWaitTime(const Patient& patient) {
+        const Time CT(U.getTime());
+        const Time PTT = patient.time();
+        Time* AWT = &m_avgWaitContagion;
+        const int PTN = patient.number();
+
+        if (patient == TRIAGE) {
+            AWT = &m_avgWaitTriage;
+        }
+
+        *AWT = ((CT - PTT) + (*AWT * (PTN - 1))) / PTN;
+    }
 
     /**
      * Finds and returns the index of the first patient in line that matches a
@@ -45,8 +73,11 @@ namespace seneca {
      * found index. If the function iterates over the entire lineup without
      * finding a match, it returns -1.
     */
-    int PreTriage::indexOfFirstInLine(const char patientType) {
-        return 0;
+    int PreTriage::indexOfFirstInLine(const char patientType) const {
+        for (int i = 0; i < m_numPatients; ++i) {
+            if (*(m_patients[i]) == patientType) return i;
+        }
+        return -1;
     }
 
     /**
@@ -100,11 +131,52 @@ namespace seneca {
      *   No data or bad data file!
      *   ```
     */
-    void PreTriage::load() {}
+    void PreTriage::load() {
+        ifstream ifstr;
+        ifstr.open(m_fileName);
+
+        cout << "Loading data..." << endl;
+
+        ifstr >> m_avgWaitContagion;
+        U.clearIstrBuffer(ifstr, ',');
+
+        ifstr >> m_avgWaitTriage;
+        U.clearIstrBuffer(ifstr);
+
+        for (int i = 0; i < MAX_LINEUP && ifstr.good(); ++i) {
+            char patientType = ifstr.get();
+            U.clearIstrBuffer(ifstr, ',');
+
+            Patient* patient = nullptr;
+
+            if (patientType == CONTAGION) {
+                patient = new TestPatient();
+            } else if (patientType == TRIAGE) {
+                patient = new TriagePatient();
+            }
+
+            if (patient) {
+                ifstr >> *patient;
+                U.clearIstrBuffer(ifstr);   // Ignore the \n at the and of the line
+
+                m_patients[i] = patient;
+                ++m_numPatients;
+            }
+        }
+
+        if (ifstr.good()) cout << "Warning: number of records exceeded " << MAX_LINEUP << endl;
+
+        if (m_numPatients)
+            cout << m_numPatients << " Records imported..." << endl;
+        else
+            cout << "No data or bad data file!" << endl << endl;
+
+        ifstr.close();
+    }
 
     /**
      * 1. Opens the data file for output
-     * 2. Inserts `"Saving lineup..."` into cout and goes to newline
+     * 2. Inserts `"Saving lineup..."` into `cout` and goes to newline
      * 3. Inserts the average Contagion Test and Triage wait time, comma-separated
      *    into the data file and goes to newline
      * 4. Iterates through the lineup array of Patient pointers
@@ -112,7 +184,36 @@ namespace seneca {
      * 5. Inserts the number of records saved for each type of patient into `cout`
      *    and goes to newline
     */
-    void PreTriage::save() {}
+    void PreTriage::save() const {
+        ofstream ofstr;
+        ofstr.open(m_fileName);
+
+        cout << "Saving lineup..." << endl;
+
+        ofstr << m_avgWaitContagion << "," << m_avgWaitTriage << endl;
+
+        int cCnt = 0, tCnt = 0;
+        for (int i = 0; i < m_numPatients; ++i) {
+            const Patient& patient = *m_patients[i];
+
+            if (patient == CONTAGION)
+                ++cCnt;
+            else if (patient == TRIAGE)
+                ++tCnt;
+
+            ofstr << patient << endl;
+        }
+
+        ofstr.close();
+
+        cout << cCnt << " Contagion Tests and ";
+        cout << tCnt << " Triage records were saved!" << endl;
+    }
+
+    inline int getMenuOpt(const Menu& menu) {
+        int opt = 0;
+        return menu >> opt;
+    }
 
     /**
      * Register a new patient:
@@ -150,7 +251,59 @@ namespace seneca {
      *      - Go to newline twice
      * - Increase the lineup size 
     */
-    void PreTriage::registerPatient() {}
+    void PreTriage::registerPatient() {
+        if (m_numPatients == MAX_LINEUP) {
+            cout << "Line up full!" << endl;
+            return;
+        }
+
+        Patient* patient = m_patients[m_numPatients];
+
+        switch (
+            getMenuOpt(
+                Menu(
+                    "Select Type of Registration\n1- Contagion Test\n2- Triage", 1))) {
+            case 0:
+                return;
+            case 1:
+                patient = new TestPatient();
+                break;
+            case 2:
+                patient = new TriagePatient();
+                break;
+            default:
+                cerr << "This shouldn't happen!" << endl;
+                return;
+        }
+
+        patient->setArrivalTime();
+
+        cout << "Please enter patient information: ";
+        cin >> *patient;
+        cout << endl;
+
+        cout << "******************************************" << endl;
+        cout << *patient;
+        cout << "Estimated Wait Time: " << getWaitTime(*patient) << endl;
+        cout << "******************************************" << endl
+             << endl;
+
+        ++m_numPatients;
+    }
+
+    inline char getPatientType(const Menu& menu) {
+        switch (getMenuOpt(menu)) {
+            case 0:
+                return 0;
+            case 1:
+                return PreTriage::CONTAGION;
+            case 2:
+                return PreTriage::TRIAGE;
+            default:
+                cerr << "This shouldn't happen!" << endl;
+                return 0;
+        }
+    }
 
     /**
      * Calls the next patient in line to be admitted to the contagion test centre or
@@ -187,7 +340,30 @@ namespace seneca {
      * - Remove the patient from the lineup using the `removeDynamicElement`
      *   function template.
     */
-    void PreTriage::admit() {}
+    void PreTriage::admit() {
+        char patientType = getPatientType(
+            Menu("Select Type of Admittance:\n1- Contagion Test\n2- Triage", 1));
+        if (!patientType) return;
+
+        int index = indexOfFirstInLine(patientType);
+        if (index == -1) {
+            cout << "Lineup is empty!" << endl;
+            return;
+        }
+
+        const Patient& patient = *m_patients[index];
+
+        cout << endl;
+        cout << "******************************************" << endl;
+        cout << "Call time [" << Time(U.getTime()) << "]" << endl;
+        cout << "Calling for " << patient;
+        cout << "******************************************" << endl
+             << endl;
+
+        setAverageWaitTime(patient);
+
+        U.removeDynamicElement(m_patients, index, m_numPatients);
+    }
 
     /**
      * Prints a report on patients currently in the lineup.
@@ -214,15 +390,52 @@ namespace seneca {
      *      -------------------------------------------------------------------------------
      *      ```
     */
-    void PreTriage::lineup() {}
+    void PreTriage::lineup() const {
+        char patientType = getPatientType(
+            Menu(
+                "Select The Lineup:\n1- Contagion Test\n2- Triage", 1
+            )
+        );
+
+        cout << "Row - Patient name                                          OHIP     Tk #  Time" << endl;
+        cout << "-------------------------------------------------------------------------------" << endl;
+
+        int i = indexOfFirstInLine(patientType);
+        if (i < 0) {
+            clog << "Line up is empty!" << endl;
+        } else {
+            clog << *m_patients[i++];
+
+            for (; i < m_numPatients; ++i) {
+                const Patient& patient = *m_patients[i];
+                if (patient == patientType) {
+                    clog << patient;
+                }
+            }
+        }
+
+        cout << "-------------------------------------------------------------------------------" << endl;
+    }
 
     /**
      * `fileName` will be stored in `m_fileName`.
      * `avgWaitContagion` will be init. to 15. `avgWaitTriage` will be init to 5.
      * Time values may be overwritten by values in the data file
     */
-    PreTriage::PreTriage(char* fileName) {}
-    PreTriage::~PreTriage() {}
+    PreTriage::PreTriage(const char* fileName)
+        : m_avgWaitContagion(15), m_avgWaitTriage(5) {
+        m_fileName = new char[strlen(fileName) + 1];
+        strcpy(m_fileName, fileName);
+        load();
+    }
+    
+    PreTriage::~PreTriage() {
+        save();
+
+        for (int i = 0; i < m_numPatients; ++i) delete m_patients[i];
+
+        delete[] m_fileName;
+    }
 
     /**
      * Runs the PreTriage main application.
@@ -244,5 +457,27 @@ namespace seneca {
      * 5. If the selection is 3 call the lineup method
      * 6. Go back to 1
     */
-    void PreTriage::run() {}
+    void PreTriage::run() {
+        while (true) {
+            switch (
+                getMenuOpt(
+                    Menu(
+                        "General Healthcare Facility Pre-Triage Application\n1- Register\n2- Admit\n3- View Lineup", 0))) {
+                case 0:
+                    return;
+                case 1:
+                    registerPatient();
+                    break;
+                case 2:
+                    admit();
+                    break;
+                case 3:
+                    lineup();
+                    break;
+                default:
+                    cerr << "This shouldn't happen!" << endl;
+                    break;
+            }
+        }
+    }
 }

@@ -140,7 +140,7 @@ namespace seneca {
      * 
      * `2` is returned as user's selection.
     */
-    int& Menu::operator>>(int& Selection) {
+    int& Menu::operator>>(int& Selection) const {
         display();
         return U.getInt(Selection, 0, m_numOptions);
     }

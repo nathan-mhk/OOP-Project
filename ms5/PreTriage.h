@@ -15,7 +15,12 @@
 
 namespace seneca {
     class PreTriage {
+    public:
         static const int MAX_LINEUP = 100;
+        static const char CONTAGION = 'C';
+        static const char TRIAGE = 'T';
+
+    private:
         Time m_avgWaitContagion {};
         Time m_avgWaitTriage {};
         Patient* m_patients[MAX_LINEUP] {};
@@ -56,7 +61,7 @@ namespace seneca {
          * found index. If the function iterates over the entire lineup without
          * finding a match, it returns -1.
         */
-        int indexOfFirstInLine(const char patientType);
+        int indexOfFirstInLine(const char patientType) const;
 
         /**
          * Loads the average wait times and the patient records from the data file
@@ -93,7 +98,7 @@ namespace seneca {
          *   Warning: number of records exceeded 100
          *   ```
          * - If no records were read print `"No data or bad data file~"` otherwise, print
-         *   `"### Records imported"` (`###` is replaced with the number of records read)
+         *   `"### Records imported..."` (`###` is replaced with the number of records read)
          *   Example:
          *   ```
          *   Loading data...
@@ -113,7 +118,7 @@ namespace seneca {
 
         /**
          * 1. Opens the data file for output
-         * 2. Inserts `"Saving lineup..."` into cout and goes to newline
+         * 2. Inserts `"Saving lineup..."` into `cout` and goes to newline
          * 3. Inserts the average Contagion Test and Triage wait time, comma-separated
          *    into the data file and goes to newline
          * 4. Iterates through the lineup array of Patient pointers
@@ -121,7 +126,7 @@ namespace seneca {
          * 5. Inserts the number of records saved for each type of patient into `cout`
          *    and goes to newline
         */
-        void save();
+        void save() const;
 
         /**
          * Register a new patient:
@@ -223,7 +228,7 @@ namespace seneca {
          *      -------------------------------------------------------------------------------
          *      ```
         */
-        void lineup();
+        void lineup() const;
 
     public:
         /**
@@ -231,7 +236,7 @@ namespace seneca {
          * `avgWaitContagion` will be init. to 15. `avgWaitTriage` will be init to 5.
          * Time values may be overwritten by values in the data file
         */
-        PreTriage(char* fileName);
+        PreTriage(const char* fileName);
         ~PreTriage();
 
         /**
