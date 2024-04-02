@@ -133,7 +133,7 @@ namespace seneca {
          *        ```
          *        and then insert the ticket.
         */
-        virtual std::ostream& write(std::ostream& ostr = cout) const;
+        virtual std::ostream& write(std::ostream& ostr = cout) const override;
 
         /**
          * Extract patient information from the istream.
@@ -183,7 +183,7 @@ namespace seneca {
          * ensure that any dynamically allocated memory held by the name
          * attribute is deleted, and the pointer is set to nullptr.
         */
-        virtual std::istream& read(std::istream& istr = cin);
+        virtual std::istream& read(std::istream& istr = cin) override;
     };
 }
 

@@ -22,9 +22,9 @@ namespace seneca {
         ~TriagePatient();
         TriagePatient(const TriagePatient& triagePatient);
         TriagePatient& operator=(const TriagePatient& triagePatient);
-        virtual char type() const;
-        virtual std::ostream& write(std::ostream& ostr = cout) const;
-        virtual std::istream& read(std::istream& istr = cin);
+        virtual char type() const override;
+        virtual std::ostream& write(std::ostream& ostr = cout) const override;
+        virtual std::istream& read(std::istream& istr = cin) override;
     };
 }
 
