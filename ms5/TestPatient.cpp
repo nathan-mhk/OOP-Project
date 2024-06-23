@@ -24,7 +24,8 @@ namespace seneca {
     std::istream& TestPatient::read(std::istream& istr) {
         Patient::read(istr);
 
-        if (&istr != &std::cin) nextTestTicket = number() + 1;
+        if (&istr != &std::cin)
+            nextTestTicket = number() + 1;  // fstream
 
         return istr;
     }

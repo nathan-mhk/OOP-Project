@@ -9,9 +9,19 @@
 // -----------------------------------------------------------
 // Name                 Date            Reason
 ***********************************************************************/
+/**
+ * Name: Nathan Kong
+ * Email: nkong@myseneca.ca
+ * ID: 150950236
+ * Date: 2024-03-18
+ * 
+ * I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
+*/
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <cstdlib>
 #include <ctime>
+#include <limits>
 #include "Utils.h"
 using namespace std;
 namespace seneca {
@@ -36,5 +46,38 @@ namespace seneca {
       seneca::debug = true;
       m_testMins = hour * 60 + min;
    }
-   
+
+   void Utils::clearIstrBuffer(std::istream& istr, const char delim) {
+      istr.ignore(numeric_limits<streamsize>::max(), delim);
+   }
+
+   int& Utils::getInt(int& value, const int& min, const int& max) {
+      while (true) {
+         cin >> value;
+
+         if (cin.fail()) {
+               cout << "Bad integer value, try again: ";
+
+               cin.clear();
+               clearIstrBuffer();
+               continue;
+         }
+
+         if (cin.peek() != '\n') {
+               cout << "Only enter an integer, try again: ";
+
+               clearIstrBuffer();
+               continue;
+         }
+
+         if (value < min || value > max) {
+               cout << "Invalid value enterd, retry[" << min << " <= value <= "<< max << "]: ";
+               
+               clearIstrBuffer();
+               continue;
+         }
+         clearIstrBuffer();
+         return value;
+      }
+   }
 }

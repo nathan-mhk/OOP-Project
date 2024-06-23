@@ -13,7 +13,7 @@
  * Name: Nathan Kong
  * Email: nkong@myseneca.ca
  * ID: 150950236
- * Date: 2024-03-18
+ * Date: 2024-03-25
  * 
  * I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
 */
@@ -31,7 +31,7 @@ namespace seneca {
       /// <summary>
       /// index for the time addition intervals ({ 3,5,9,20,30 });
       /// </summary>
-      unsigned int m_testIndex = 0 ;
+      unsigned int m_testIndex = 0;
    public:
       /// <summary>
       /// Set the debug global variable to true and sets the m_testMins attribute to 
@@ -50,8 +50,16 @@ namespace seneca {
       /// <returns>the current time in minutes</returns>
       int getTime(); // returns the time of day in minutes
 
+      /// <summary>
+      /// compares s1 to s2
+      /// </summary>
+      /// <param name="s1">Cstring</param>
+      /// <param name="s2">Cstring</param>
+      /// <returns> &gt;0 if s1 &gt; s2  OR  &lt;0 if s1 &lt; s2 OR 0 if s1 = s2</returns>
+      int strcmp(const char* s1, const char* s2)const;
+
       /// @brief Clear the istream buffer
-      /// @param istr - the istream buffer to be cleared. Default `cin`
+      /// @param istr the istream buffer to be cleared. Default `cin`
       /// @param delim - the delimiter of the buffer to be cleared up to. Default `\\n`.
       void clearIstrBuffer(std::istream& istr = std::cin, const char delim = '\n');
 
@@ -61,17 +69,25 @@ namespace seneca {
       /// @param max - the max. acceptable value, inclusive
       /// @return the reference variable of `value`
       int& getInt(int& value, const int& min, const int& max);
-   };
 
+      template <typename type>
+      void removeDynamicElement(type* array[], int index, int& size) {
+         delete array[index];
+         for (int i = index; i < size; ++i) {
+            array[i] = array[i + 1];
+         }
+         --size;
+      }
+   };
    /// <summary>
    /// making seneca::debug variable global to all the files
    /// which include "Utils.h"
    /// </summary>
-   extern bool debug; 
+   extern bool debug;
    /// <summary>
    /// making seneca::U "Utils" object global to all the files which include "Utils.h"
    /// </summary>
-   extern Utils U;    
+   extern Utils U;
 
 }
 #endif // !SENECA_UTILS_H_

@@ -16,8 +16,8 @@ using namespace std;
 
 namespace seneca {
 
-    const int H24_IN_M = 1440;
     class Time {
+        static const int H24_IN_M = 1440;
         unsigned int m_mins{0};
 
     public:

@@ -75,12 +75,8 @@ namespace seneca {
         m_symptoms = new char[strlen(tmpSymptoms) + 1];
         strcpy(m_symptoms, tmpSymptoms);
 
-        U.clearIstrBuffer(istr, '\n');
-
-        if (&istr != &std::cin) {
-            // fstream
-            nextTriageTicket = number() + 1;
-        }
+        if (&istr != &std::cin)
+            nextTriageTicket = number() + 1;    // fstream
 
         return istr;
     }

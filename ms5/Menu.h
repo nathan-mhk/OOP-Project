@@ -120,6 +120,6 @@ namespace seneca {
          * 
          * `2` is returned as user's selection.
         */
-        int& operator>>(int& Selection);
+        int& operator>>(int& Selection) const;
     };
 }

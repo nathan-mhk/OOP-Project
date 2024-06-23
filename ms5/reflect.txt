@@ -1,0 +1,64 @@
+/**
+ * Name: Nathan Kong
+ * Email: nkong@myseneca.ca
+ * ID: 150950236
+ * Date: 2024-03-26
+ * 
+ * I have done all the coding by myself and only copied the code that my professor provided to complete my workshops and assignments.
+*/
+
+While working on this project, I've learned a lot on the concepts of OOP. In 
+the design of this program, we have divided it into 4 main objects - menu, 
+IOAble, Time, and Utils. IOAble, as an interface, is further expanded into 
+multiple derived objects - TestPatient, TriagePatient, and Ticket. Meanwhile, 
+TestPatient and TriagePatient is consolidated into another base class, Patient. 
+This design pattern fits the philosophy of divide and conquer, making the 
+project much easier the manage and work with. With how the classes are designed 
+and implemented, I've learned about the conveniences of operator overloading 
+and virtual functions, namely the operator>> and operator<< functions. They are 
+being used in every one of the classes we developed.
+
+The most significant challenges I encountered while developing the application 
+is input operations. Because C++ is a low-level language, we get to directly 
+work with the input buffer, which could leads to all sorts of problem. 
+Including: 1. accidentally ignoring the incorrect character, or ignored too 
+many characters in the buffer. 2. forgot to ignore some specific character(s) 
+in the buffer. When these sorts of things happened, it almost always results in 
+seg fault. As this is not really logical errors, it can be a bit more difficult/
+tedious to locate and fix the bugs. And because the solution is usually very 
+minor (like adding/removing a line of .ignore()), it could be quite annoying 
+when these kinds of bugs kept happening. To overcome this challenge, the best 
+strategy is to stick to a single "style" of coding. For instance, do not clear 
+the buffer in the very end of **all** of the operator>> functions. The input 
+buffer shall only be cleared by the caller to the function. If this "style" is 
+not consistent across the classes, it could be a huge hassle to fix the bug if 
+it did happened.
+
+Another challenges I faced the most is understanding the requirements of the 
+milestone (the description of the functions/classes that we are required to 
+implement). A lot of times the wordings/phrases are not clear enough/contains 
+ambiguity on what the function is suppose to do. I must take a guess on it, and 
+then inspect either the sample output, or the main program, to make my guess 
+more accurate. However, at the same time, the requirements is usually quite 
+lengthy. On top of that, there are sometimes contradictions between the 
+requirements descriptions and the sample output. For instance, the description 
+of the function `PreTriage::admit()` are as follow:
+```
+- print: "Call time [H:M]"
+- go to newline
+- print: "Calling for "
+```
+
+However, the correct output (as seen in `ms53_correct_output.txt`) should be:
+```
+- print: "Call time: [H:M]"
+- go to newline
+- print: "Calling at for "
+```
+
+With this 2 challenges, the most time consuming part of me working on the 
+project is usually 1. reading and understanding the requirements. 2. fixing 
+non-logical bugs/bugs that are not really related to the program flow (the 
+program logic is actually not that difficult, as the flow is usually described 
+in the requirements, so all I have to do is to translate the words from English 
+into C++).
